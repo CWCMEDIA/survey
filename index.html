@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Survey</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Selection Modal -->
+    <div id="languageModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🌍 Select Your Language</h2>
+                <p>Bitte wählen Sie Ihre Sprache / 言語を選択してください</p>
+            </div>
+            <div class="language-options">
+                <button class="language-btn" data-language="german">
+                    <span class="flag">🇩🇪</span>
+                    <span class="language-text">Deutsch</span>
+                </button>
+                <button class="language-btn" data-language="japanese">
+                    <span class="flag">🇯🇵</span>
+                    <span class="language-text">日本語</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="survey-card">
+            <div class="header">
+                <h1 class="title">Research Survey</h1>
+                <p class="subtitle">Your feedback helps us improve our research</p>
+            </div>
+            
+            <div class="video-container">
+                <iframe 
+                    id="surveyVideo"
+                    width="100%" 
+                    height="315" 
+                    src="" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <form id="surveyForm" class="survey-form">
+                <div id="surveyContent">
+                    <!-- Survey content will be loaded here -->
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Submit Survey</span>
+                        <div class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
