@@ -844,7 +844,7 @@ class SurveyApp {
 
     async sendToGoogleSheets(formData) {
         // Your Google Apps Script web app URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-8uu0gO6bFr-i1RyhXU_PpicxghOCkdJPd_-zGy6DjPeye0xht6brDXiABkqWspvW/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxH1Es4-ijxxk-RwABUgfIoWUMeW-KAIrjUL0CoT3NiKBxuZQgWr1ZFcI57bxsdrVDH/exec';
         
         try {
             const response = await fetch(GOOGLE_SCRIPT_URL, {
