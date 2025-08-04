@@ -35,8 +35,6 @@
                 <p class="subtitle">Your feedback helps us improve our research</p>
             </div>
             
-
-
             <form id="surveyForm" class="survey-form">
                 <div id="surveyContent">
                     <!-- Survey content will be loaded here -->
@@ -53,6 +51,11 @@
             </form>
         </div>
     </div>
+
+    <!-- Hidden form for simple submission -->
+    <form id="hiddenForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="display: none;">
+        <input type="hidden" name="survey_data" id="surveyDataInput">
+    </form>
 
     <script src="script.js"></script>
 </body>

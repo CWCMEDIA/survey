@@ -5,42 +5,50 @@ function doPost(e) {
   try {
     // Parse the incoming data
     const data = JSON.parse(e.postData.contents);
-    
-    // Get the active spreadsheet
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = spreadsheet.getActiveSheet();
-    
-    // Prepare the row data
+
+    // Open your Google Sheet explicitly by URL
+    const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1WXVMJOoWf1wk59JpgyFa7W2dXHd0bO1UVXqYQud4218/edit");
+    const sheet = spreadsheet.getSheetByName("Survey Data Collection"); // Matches your sheet tab title
+
+    // Prepare the row data with proper formatting for German/Japanese surveys
     const rowData = formatSurveyData(data);
-    
-    // Add the data to the sheet
+
+    // Add the data as a new row
     sheet.appendRow(rowData);
-    
+
     // Auto-resize columns for better readability
     autoResizeColumns(sheet);
-    
+
     // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({ success: true, message: "Data received successfully" }))
       .setMimeType(ContentService.MimeType.JSON);
-      
+
   } catch (error) {
     // Return error response
     return ContentService
-      .createTextOutput(JSON.stringify({ 
-        success: false, 
-        error: error.toString() 
+      .createTextOutput(JSON.stringify({
+        success: false,
+        error: error.toString()
       }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
+// Handle CORS preflight requests
+function doOptions(e) {
+  return ContentService
+    .createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+// Format survey data into a single row for the sheet
 function formatSurveyData(data) {
   const timestamp = new Date(data.timestamp);
   const formattedDate = timestamp.toLocaleString();
   
   // Create headers if this is the first submission
-  const sheet = SpreadsheetApp.getActiveSheet();
+  const sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1WXVMJOoWf1wk59JpgyFa7W2dXHd0bO1UVXqYQud4218/edit").getSheetByName("Survey Data Collection");
   if (sheet.getLastRow() === 0) {
     const headers = createHeaders(data.language);
     sheet.appendRow(headers);
@@ -179,49 +187,12 @@ function createHeaders(language) {
   ];
 }
 
+// Automatically resize columns for better readability
 function autoResizeColumns(sheet) {
   const lastColumn = sheet.getLastColumn();
   for (let i = 1; i <= lastColumn; i++) {
     sheet.autoResizeColumn(i);
   }
-}
-
-// Optional: Function to set up the sheet formatting
-function setupSheetFormatting() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  
-  // Set up headers if they don't exist
-  if (sheet.getLastRow() === 0) {
-    const headers = [
-      'Timestamp',
-      'Survey ID', 
-      'Survey Title',
-      'Language',
-      'Question 1',
-      'Question 2',
-      'Question 3',
-      'Question 4',
-      'Question 5'
-    ];
-    sheet.appendRow(headers);
-  }
-  
-  // Format the header row
-  const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
-  headerRange.setBackground('#667eea');
-  headerRange.setFontColor('white');
-  headerRange.setFontWeight('bold');
-  headerRange.setHorizontalAlignment('center');
-  
-  // Add borders
-  const dataRange = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn());
-  dataRange.setBorder(true, true, true, true, true, true);
-  
-  // Auto-resize columns
-  autoResizeColumns(sheet);
-  
-  // Freeze the header row
-  sheet.setFrozenRows(1);
 }
 
 // Test function to verify the setup
