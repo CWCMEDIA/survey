@@ -77,6 +77,58 @@ const universalQuestions = [
     }
 ];
 
+// Japanese questions for Section 1 (Basic Information)
+const japaneseQuestions = [
+    {
+        id: 1,
+        type: "radio",
+        question: "年齢：",
+        options: ["18–24歳", "25–34歳", "35–44歳", "45–54歳", "55–64歳", "65歳以上"]
+    },
+    {
+        id: 2,
+        type: "radio",
+        question: "性別：",
+        options: ["男性", "女性", "その他", "回答しない"]
+    },
+    {
+        id: 3,
+        type: "radio",
+        question: "居住国：",
+        options: ["ドイツ", "日本", "その他"]
+    },
+    {
+        id: 4,
+        type: "radio",
+        question: "文化的所属（自己認識）：",
+        options: ["ドイツ文化", "日本文化", "その他"]
+    },
+    {
+        id: 5,
+        type: "radio",
+        question: "最終学歴：",
+        options: ["高校卒業", "専門学校・短大卒業", "大学卒業", "大学院修了", "その他"]
+    },
+    {
+        id: 6,
+        type: "radio",
+        question: "現在の就業状況：",
+        options: ["正社員（フルタイム）", "契約社員・派遣社員", "パート・アルバイト", "学生", "無職", "その他"]
+    },
+    {
+        id: 7,
+        type: "radio",
+        question: "毎月の可処分所得（手取り）（任意回答）：",
+        options: ["250,000円未満", "250,000円～300,000円", "300,000円～350,000円", "350,000円～400,000円", "400,000円以上"]
+    },
+    {
+        id: 8,
+        type: "radio",
+        question: "環境や社会のための取り組み（例：エコ、リサイクル）は、どのくらい大切だと思いますか？",
+        options: ["とても大切だと思う", "まあ大切だと思う", "あまり大切だと思わない", "全く大切だと思わない"]
+    }
+];
+
 // No longer needed - each survey now has its own specific video
 
 class SurveyApp {
@@ -164,8 +216,19 @@ class SurveyApp {
     renderSurvey() {
         this.surveyContent.innerHTML = '';
         
-        // Use the universal questions for all surveys
-        universalQuestions.forEach(question => {
+        // Choose questions based on selected language
+        const questionsToUse = this.selectedLanguage === 'japanese' ? japaneseQuestions : universalQuestions;
+        
+        // Add section header for Japanese
+        if (this.selectedLanguage === 'japanese') {
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'section-header';
+            sectionHeader.innerHTML = '<h2>基本情報</h2>';
+            this.surveyContent.appendChild(sectionHeader);
+        }
+        
+        // Use the appropriate questions for the selected language
+        questionsToUse.forEach(question => {
             const questionElement = this.createQuestionElement(question);
             this.surveyContent.appendChild(questionElement);
         });
@@ -341,7 +404,10 @@ class SurveyApp {
             responses: {}
         };
         
-        universalQuestions.forEach(question => {
+        // Choose questions based on selected language
+        const questionsToUse = this.selectedLanguage === 'japanese' ? japaneseQuestions : universalQuestions;
+        
+        questionsToUse.forEach(question => {
             const questionName = `question_${question.id}`;
             
             if (question.type === 'checkbox') {

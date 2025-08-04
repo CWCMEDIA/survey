@@ -474,6 +474,23 @@ body {
     }
 }
 
+/* Section header styling */
+.section-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
 /* Loading animation */
 .loading {
     text-align: center;

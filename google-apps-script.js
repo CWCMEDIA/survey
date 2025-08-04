@@ -42,18 +42,35 @@ function formatSurveyData(data) {
   // Create headers if this is the first submission
   const sheet = SpreadsheetApp.getActiveSheet();
   if (sheet.getLastRow() === 0) {
-    const headers = createHeaders();
+    const headers = createHeaders(data.language);
     sheet.appendRow(headers);
   }
   
-  // Format the responses (same for all surveys now)
-  const responses = [
-    data.responses[1] || '', // Social media platform
-    data.responses[2] || '', // Tech-savviness rating
-    Array.isArray(data.responses[3]) ? data.responses[3].join(', ') : data.responses[3] || '', // Devices owned
-    data.responses[4] || '', // Most annoying thing about tech
-    data.responses[5] || ''  // Ideal smartphone description
-  ];
+  // Format the responses based on language
+  let responses = [];
+  
+  if (data.language === 'japanese') {
+    // Japanese questions (Section 1 - Basic Information)
+    responses = [
+      data.responses[1] || '', // 年齢 (Age)
+      data.responses[2] || '', // 性別 (Gender)
+      data.responses[3] || '', // 居住国 (Country of Residence)
+      data.responses[4] || '', // 文化的所属 (Cultural Affiliation)
+      data.responses[5] || '', // 最終学歴 (Education)
+      data.responses[6] || '', // 現在の就業状況 (Employment Status)
+      data.responses[7] || '', // 毎月の可処分所得 (Monthly Disposable Income)
+      data.responses[8] || ''  // 環境や社会のための取り組み (Environmental/Social Initiatives)
+    ];
+  } else {
+    // English questions (original universal questions)
+    responses = [
+      data.responses[1] || '', // Social media platform
+      data.responses[2] || '', // Tech-savviness rating
+      Array.isArray(data.responses[3]) ? data.responses[3].join(', ') : data.responses[3] || '', // Devices owned
+      data.responses[4] || '', // Most annoying thing about tech
+      data.responses[5] || ''  // Ideal smartphone description
+    ];
+  }
   
   // Return the complete row data
   return [
@@ -66,14 +83,31 @@ function formatSurveyData(data) {
   ];
 }
 
-function createHeaders() {
-  const questionHeaders = [
-    'Social Media Platform',
-    'Tech-Savviness Rating', 
-    'Devices Owned',
-    'Most Annoying Tech Thing',
-    'Ideal Smartphone Description'
-  ];
+function createHeaders(language) {
+  let questionHeaders = [];
+  
+  if (language === 'japanese') {
+    // Japanese question headers (Section 1 - Basic Information)
+    questionHeaders = [
+      '年齢 (Age)',
+      '性別 (Gender)',
+      '居住国 (Country of Residence)',
+      '文化的所属 (Cultural Affiliation)',
+      '最終学歴 (Education)',
+      '現在の就業状況 (Employment Status)',
+      '毎月の可処分所得 (Monthly Disposable Income)',
+      '環境や社会のための取り組み (Environmental/Social Initiatives)'
+    ];
+  } else {
+    // English question headers
+    questionHeaders = [
+      'Social Media Platform',
+      'Tech-Savviness Rating', 
+      'Devices Owned',
+      'Most Annoying Tech Thing',
+      'Ideal Smartphone Description'
+    ];
+  }
   
   return [
     'Timestamp',
