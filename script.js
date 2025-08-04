@@ -879,7 +879,7 @@ class SurveyApp {
         // Create a mailto link with the survey data
         const subject = encodeURIComponent(`Survey Response - ${formData.language} - ${formData.surveyId}`);
         const body = encodeURIComponent(JSON.stringify(formData, null, 2));
-        const mailtoLink = `mailto:your-email@example.com?subject=${subject}&body=${body}`;
+        const mailtoLink = `mailto:connor@example.com?subject=${subject}&body=${body}`;
         
         // Open email client (optional)
         // window.open(mailtoLink);
