@@ -78,7 +78,7 @@ const universalQuestions = [
 ];
 
 // Japanese questions for Section 1 (Basic Information)
-const japaneseQuestions = [
+const japaneseQuestionsSection1 = [
     {
         id: 1,
         type: "radio",
@@ -126,6 +126,40 @@ const japaneseQuestions = [
         type: "likert",
         question: "環境や社会のための取り組み（例：エコ、リサイクル）は、どのくらい大切だと思いますか？",
         options: ["1 - 全く大切だと思わない", "2 - あまり大切だと思わない", "3 - どちらともいえない", "4 - まあ大切だと思う", "5 - とても大切だと思う"]
+    }
+];
+
+// Japanese questions for Section 2 (Cultural Orientation)
+const japaneseQuestionsSection2 = [
+    {
+        id: 9,
+        type: "likert",
+        question: "次の文にどの程度同意しますか？(1 = 全くそう思わない … 5 = とてもそう思う)",
+        options: ["1", "2", "3", "4", "5"],
+        statements: [
+            "独立して行動するよりも、グループの一員であるほうがよい。",
+            "意思決定は集団で行うことが重要だと思う。",
+            "調和と合意を保つことが大切だと思う。"
+        ]
+    },
+    {
+        id: 10,
+        type: "radio",
+        question: "🔎 操作チェック（広告内容の確認）<br><br>表示された広告の主な内容は何でしたか？",
+        options: ["環境や持続可能性", "製品の味や楽しみ方", "特に強調点のない一般的な情報", "その他"]
+    },
+    {
+        id: 11,
+        type: "likert-multiple",
+        question: "🏭 製造元に関する評価<br><br>次の文にどの程度同意しますか？(1 = 全くそう思わない … 5 = とてもそう思う)",
+        options: ["1", "2", "3", "4", "5"],
+        statements: [
+            "この製造元を信頼できると思う。",
+            "製造元は誠実に情報を伝えていると感じる。",
+            "製造元は信頼できると考える。",
+            "製造元は責任ある行動を取っていると思う。",
+            "広告メッセージは本物らしいと感じる。"
+        ]
     }
 ];
 
@@ -216,22 +250,61 @@ class SurveyApp {
     renderSurvey() {
         this.surveyContent.innerHTML = '';
         
-        // Choose questions based on selected language
-        const questionsToUse = this.selectedLanguage === 'japanese' ? japaneseQuestions : universalQuestions;
-        
-        // Add section header for Japanese
         if (this.selectedLanguage === 'japanese') {
-            const sectionHeader = document.createElement('div');
-            sectionHeader.className = 'section-header';
-            sectionHeader.innerHTML = '<h2>基本情報</h2>';
-            this.surveyContent.appendChild(sectionHeader);
+            // Render Japanese survey with sections
+            this.renderJapaneseSurvey();
+        } else {
+            // Render English survey
+            universalQuestions.forEach(question => {
+                const questionElement = this.createQuestionElement(question);
+                this.surveyContent.appendChild(questionElement);
+            });
         }
+    }
+
+    renderJapaneseSurvey() {
+        // Section 1: Basic Information
+        const section1Header = document.createElement('div');
+        section1Header.className = 'section-header';
+        section1Header.innerHTML = '<h2>基本情報</h2>';
+        this.surveyContent.appendChild(section1Header);
         
-        // Use the appropriate questions for the selected language
-        questionsToUse.forEach(question => {
+        // Add Section 1 questions
+        japaneseQuestionsSection1.forEach(question => {
             const questionElement = this.createQuestionElement(question);
             this.surveyContent.appendChild(questionElement);
         });
+        
+        // Section 2: Cultural Orientation
+        const section2Header = document.createElement('div');
+        section2Header.className = 'section-header';
+        section2Header.innerHTML = '<h2>文化的志向</h2>';
+        this.surveyContent.appendChild(section2Header);
+        
+        // Add first question of Section 2
+        const firstSection2Question = this.createQuestionElement(japaneseQuestionsSection2[0]);
+        this.surveyContent.appendChild(firstSection2Question);
+        
+        // Add video after first question of Section 2
+        const videoContainer = document.createElement('div');
+        videoContainer.className = 'video-container';
+        videoContainer.innerHTML = `
+            <iframe 
+                width="100%" 
+                height="315" 
+                src="${this.videoIframe.src}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        `;
+        this.surveyContent.appendChild(videoContainer);
+        
+        // Add remaining Section 2 questions
+        for (let i = 1; i < japaneseQuestionsSection2.length; i++) {
+            const questionElement = this.createQuestionElement(japaneseQuestionsSection2[i]);
+            this.surveyContent.appendChild(questionElement);
+        }
     }
 
     createQuestionElement(question) {
@@ -259,6 +332,9 @@ class SurveyApp {
                 break;
             case 'likert':
                 questionGroup.appendChild(this.createLikertOptions(question));
+                break;
+            case 'likert-multiple':
+                questionGroup.appendChild(this.createLikertMultipleOptions(question));
                 break;
             case 'text':
                 questionGroup.appendChild(this.createTextInput(question));
@@ -375,6 +451,49 @@ class SurveyApp {
         return likertGroup;
     }
 
+    createLikertMultipleOptions(question) {
+        const container = document.createElement('div');
+        container.className = 'likert-multiple-container';
+        
+        // Add statements with individual Likert scales
+        question.statements.forEach((statement, statementIndex) => {
+            const statementGroup = document.createElement('div');
+            statementGroup.className = 'statement-group';
+            
+            const statementText = document.createElement('p');
+            statementText.className = 'statement-text';
+            statementText.textContent = statement;
+            statementGroup.appendChild(statementText);
+            
+            const likertGroup = document.createElement('div');
+            likertGroup.className = 'likert-group';
+            
+            question.options.forEach((option, optionIndex) => {
+                const likertOption = document.createElement('div');
+                likertOption.className = 'likert-option';
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question_${question.id}_statement_${statementIndex}`;
+                input.id = `q${question.id}_s${statementIndex}_o${optionIndex}`;
+                input.value = option;
+                
+                const label = document.createElement('label');
+                label.htmlFor = `q${question.id}_s${statementIndex}_o${optionIndex}`;
+                label.textContent = option;
+                
+                likertOption.appendChild(input);
+                likertOption.appendChild(label);
+                likertGroup.appendChild(likertOption);
+            });
+            
+            statementGroup.appendChild(likertGroup);
+            container.appendChild(statementGroup);
+        });
+        
+        return container;
+    }
+
     createTextInput(question) {
         const input = document.createElement('input');
         input.type = 'text';
@@ -433,24 +552,63 @@ class SurveyApp {
             responses: {}
         };
         
-        // Choose questions based on selected language
-        const questionsToUse = this.selectedLanguage === 'japanese' ? japaneseQuestions : universalQuestions;
-        
-        questionsToUse.forEach(question => {
-            const questionName = `question_${question.id}`;
-            
-            if (question.type === 'checkbox') {
-                // Handle multiple selections
-                const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
-                formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
-            } else {
-                // Handle single selection or text input
-                const element = document.querySelector(`[name="${questionName}"]`);
-                if (element) {
-                    formData.responses[question.id] = element.value;
+        if (this.selectedLanguage === 'japanese') {
+            // Collect Japanese Section 1 responses
+            japaneseQuestionsSection1.forEach(question => {
+                const questionName = `question_${question.id}`;
+                
+                if (question.type === 'checkbox') {
+                    const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else {
+                    const element = document.querySelector(`[name="${questionName}"]`);
+                    if (element) {
+                        formData.responses[question.id] = element.value;
+                    }
                 }
-            }
-        });
+            });
+            
+            // Collect Japanese Section 2 responses
+            japaneseQuestionsSection2.forEach(question => {
+                if (question.type === 'likert-multiple') {
+                    // Handle multiple statements with individual Likert scales
+                    const statementResponses = [];
+                    question.statements.forEach((statement, statementIndex) => {
+                        const questionName = `question_${question.id}_statement_${statementIndex}`;
+                        const element = document.querySelector(`[name="${questionName}"]:checked`);
+                        statementResponses.push(element ? element.value : '');
+                    });
+                    formData.responses[question.id] = statementResponses;
+                } else {
+                    const questionName = `question_${question.id}`;
+                    
+                    if (question.type === 'checkbox') {
+                        const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
+                        formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                    } else {
+                        const element = document.querySelector(`[name="${questionName}"]`);
+                        if (element) {
+                            formData.responses[question.id] = element.value;
+                        }
+                    }
+                }
+            });
+        } else {
+            // Collect English responses
+            universalQuestions.forEach(question => {
+                const questionName = `question_${question.id}`;
+                
+                if (question.type === 'checkbox') {
+                    const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else {
+                    const element = document.querySelector(`[name="${questionName}"]`);
+                    if (element) {
+                        formData.responses[question.id] = element.value;
+                    }
+                }
+            });
+        }
         
         return formData;
     }

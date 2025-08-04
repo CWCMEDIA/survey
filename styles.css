@@ -375,6 +375,28 @@ body {
     line-height: 1.3;
 }
 
+/* Multiple Likert Scale Styling */
+.likert-multiple-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.statement-group {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.statement-text {
+    font-size: 1rem;
+    color: #2d3748;
+    margin-bottom: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
 .form-actions {
     margin-top: 32px;
     text-align: center;

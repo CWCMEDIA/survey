@@ -51,7 +51,7 @@ function formatSurveyData(data) {
   
   if (data.language === 'japanese') {
     // Japanese questions (Section 1 - Basic Information)
-    responses = [
+    const section1Responses = [
       data.responses[1] || '', // 年齢 (Age)
       data.responses[2] || '', // 性別 (Gender)
       data.responses[3] || '', // 居住国 (Country of Residence)
@@ -61,6 +61,15 @@ function formatSurveyData(data) {
       data.responses[7] || '', // 毎月の可処分所得 (Monthly Disposable Income)
       data.responses[8] || ''  // 環境や社会のための取り組み (Environmental/Social Initiatives)
     ];
+    
+    // Japanese questions (Section 2 - Cultural Orientation)
+    const section2Responses = [
+      data.responses[9] || '', // 文化的志向 (Cultural Orientation)
+      data.responses[10] || '', // 操作チェック (Manipulation Check)
+      Array.isArray(data.responses[11]) ? data.responses[11].join(', ') : data.responses[11] || '' // 製造元に関する評価 (Manufacturer Evaluation)
+    ];
+    
+    responses = [...section1Responses, ...section2Responses];
   } else {
     // English questions (original universal questions)
     responses = [
@@ -88,7 +97,7 @@ function createHeaders(language) {
   
   if (language === 'japanese') {
     // Japanese question headers (Section 1 - Basic Information)
-    questionHeaders = [
+    const section1Headers = [
       '年齢 (Age)',
       '性別 (Gender)',
       '居住国 (Country of Residence)',
@@ -98,6 +107,15 @@ function createHeaders(language) {
       '毎月の可処分所得 (Monthly Disposable Income)',
       '環境や社会のための取り組み (Environmental/Social Initiatives)'
     ];
+    
+    // Japanese question headers (Section 2 - Cultural Orientation)
+    const section2Headers = [
+      '文化的志向 (Cultural Orientation)',
+      '操作チェック (Manipulation Check)',
+      '製造元に関する評価 (Manufacturer Evaluation)'
+    ];
+    
+    questionHeaders = [...section1Headers, ...section2Headers];
   } else {
     // English question headers
     questionHeaders = [
