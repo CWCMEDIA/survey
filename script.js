@@ -1,22 +1,47 @@
-// Survey data - all surveys have the same questions but different videos
+// Video collections for each language
+const germanVideos = [
+    {
+        id: "yUJC60rE_Mo",
+        url: "https://youtu.be/yUJC60rE_Mo"
+    },
+    {
+        id: "GfaGvQaS3n0", 
+        url: "https://youtu.be/GfaGvQaS3n0"
+    },
+    {
+        id: "4wu05H7vofQ",
+        url: "https://youtu.be/4wu05H7vofQ"
+    }
+];
+
+const japaneseVideos = [
+    {
+        id: "DO3jsDSufbA",
+        url: "https://youtu.be/DO3jsDSufbA"
+    },
+    {
+        id: "fVZ-z4_5WFQ",
+        url: "https://youtu.be/fVZ-z4_5WFQ"
+    },
+    {
+        id: "UcNUFn0C7Jk",
+        url: "https://youtu.be/UcNUFn0C7Jk"
+    }
+];
+
+// Survey data - all surveys have the same questions but different videos based on language
 const surveys = [
     {
         id: 1,
-        title: "Research Survey - Version 1",
-        videoUrl: "https://www.youtube.com/watch?v=lsCperzvhok",
-        videoId: "lsCperzvhok"
+        title: "Research Survey - Version 1"
     },
     {
         id: 2,
-        title: "Research Survey - Version 2", 
-        videoUrl: "https://www.youtube.com/watch?v=3jhRDJR5_c0",
-        videoId: "3jhRDJR5_c0"
+        title: "Research Survey - Version 2"
     },
     {
         id: 3,
-        title: "Research Survey - Version 3",
-        videoUrl: "https://www.youtube.com/watch?v=y4-jl17dUgE", 
-        videoId: "y4-jl17dUgE"
+        title: "Research Survey - Version 3"
     }
 ];
 
@@ -109,8 +134,21 @@ class SurveyApp {
         const randomIndex = Math.floor(Math.random() * surveys.length);
         this.currentSurvey = surveys[randomIndex];
         
-        // Use the specific video for this survey
-        this.videoIframe.src = `https://www.youtube.com/embed/${this.currentSurvey.videoId}`;
+        // Select a random video based on the chosen language
+        let selectedVideo;
+        if (this.selectedLanguage === 'german') {
+            const randomVideoIndex = Math.floor(Math.random() * germanVideos.length);
+            selectedVideo = germanVideos[randomVideoIndex];
+        } else {
+            const randomVideoIndex = Math.floor(Math.random() * japaneseVideos.length);
+            selectedVideo = japaneseVideos[randomVideoIndex];
+        }
+        
+        // Store the selected video for data collection
+        this.currentVideo = selectedVideo;
+        
+        // Use the selected video for this survey
+        this.videoIframe.src = `https://www.youtube.com/embed/${selectedVideo.id}`;
         
         // Update title with language indicator for testing
         const languageIndicator = this.selectedLanguage === 'german' ? '🇩🇪 GERMAN' : '🇯🇵 JAPANESE';
@@ -120,7 +158,7 @@ class SurveyApp {
         this.renderSurvey();
         
         console.log(`📊 Loaded Survey ${this.currentSurvey.id}: ${this.currentSurvey.title} in ${this.selectedLanguage}`);
-        console.log(`🎥 Video: ${this.currentSurvey.videoUrl}`);
+        console.log(`🎥 Video: ${selectedVideo.url}`);
     }
 
     renderSurvey() {
@@ -298,11 +336,12 @@ class SurveyApp {
             surveyId: this.currentSurvey.id,
             surveyTitle: this.currentSurvey.title,
             language: this.selectedLanguage,
+            videoUrl: this.currentVideo ? this.currentVideo.url : '',
             timestamp: new Date().toISOString(),
             responses: {}
         };
         
-        this.currentSurvey.questions.forEach(question => {
+        universalQuestions.forEach(question => {
             const questionName = `question_${question.id}`;
             
             if (question.type === 'checkbox') {

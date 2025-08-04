@@ -60,7 +60,8 @@ function formatSurveyData(data) {
     formattedDate,           // Timestamp
     data.surveyId,           // Survey ID (1, 2, or 3)
     data.surveyTitle,        // Survey Title
-    data.language,           // Language
+    data.language,           // Language (german/japanese)
+    data.videoUrl || '',     // Video URL that was shown
     ...responses             // Spread the responses
   ];
 }
@@ -79,6 +80,7 @@ function createHeaders() {
     'Survey ID',
     'Survey Title', 
     'Language',
+    'Video URL',
     ...questionHeaders
   ];
 }
