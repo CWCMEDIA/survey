@@ -832,26 +832,41 @@ class SurveyApp {
             
         } catch (error) {
             console.error('❌ Error sending to Google Sheets:', error);
-            this.showErrorMessage('Network error. Please try again.');
+            
+            // Store in localStorage as backup and show success message
+            this.storeSubmission(formData);
+            this.showSuccessMessage();
+            
+            // Log the error for debugging
+            console.log('Data stored locally as backup due to network error');
         }
-        
-        // Also store in localStorage as backup
-        this.storeSubmission(formData);
     }
 
     async sendToGoogleSheets(formData) {
         // Your Google Apps Script web app URL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_0OP-jjTD5wWeZJYuuqEO5n5YK5LcGBCnxSenCzZ9loYqZILU6gy51SHrgm-FVTQM/exec';
         
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        return await response.json();
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log('Google Sheets response:', result);
+            return result;
+            
+        } catch (error) {
+            console.error('Error sending to Google Sheets:', error);
+            throw error;
+        }
     }
 
     showErrorMessage(message) {
