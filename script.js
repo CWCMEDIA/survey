@@ -715,7 +715,10 @@ class SurveyApp {
             responses: {}
         };
         
+        console.log('Collecting data for language:', this.selectedLanguage);
+        
         if (this.selectedLanguage === 'japanese') {
+            console.log('Collecting Japanese responses...');
             // Collect Japanese Section 1 responses
             japaneseQuestionsSection1.forEach(question => {
                 const questionName = `question_${question.id}`;
@@ -868,7 +871,10 @@ class SurveyApp {
         
         if (hiddenForm && surveyDataInput) {
             surveyDataInput.value = JSON.stringify(formData);
+            console.log('Submitting to Formspree:', formData);
             hiddenForm.submit();
+        } else {
+            console.error('Hidden form elements not found');
         }
         
         // Method 2: Email the data (if you want)
