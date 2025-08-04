@@ -171,7 +171,6 @@ class SurveyApp {
         this.selectedLanguage = null;
         this.form = document.getElementById('surveyForm');
         this.surveyContent = document.getElementById('surveyContent');
-        this.videoIframe = document.getElementById('surveyVideo');
         this.languageModal = document.getElementById('languageModal');
         
         this.init();
@@ -233,8 +232,8 @@ class SurveyApp {
         // Store the selected video for data collection
         this.currentVideo = selectedVideo;
         
-        // Use the selected video for this survey
-        this.videoIframe.src = `https://www.youtube.com/embed/${selectedVideo.id}`;
+        // Store the selected video URL for this survey
+        this.currentVideoUrl = `https://www.youtube.com/embed/${selectedVideo.id}`;
         
         // Update title with language indicator for testing
         const languageIndicator = this.selectedLanguage === 'german' ? '🇩🇪 GERMAN' : '🇯🇵 JAPANESE';
@@ -292,7 +291,7 @@ class SurveyApp {
             <iframe 
                 width="100%" 
                 height="315" 
-                src="${this.videoIframe.src}" 
+                src="${this.currentVideoUrl}" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen>
