@@ -123,9 +123,9 @@ const japaneseQuestions = [
     },
     {
         id: 8,
-        type: "radio",
+        type: "likert",
         question: "環境や社会のための取り組み（例：エコ、リサイクル）は、どのくらい大切だと思いますか？",
-        options: ["とても大切だと思う", "まあ大切だと思う", "あまり大切だと思わない", "全く大切だと思わない"]
+        options: ["1 - 全く大切だと思わない", "2 - あまり大切だと思わない", "3 - どちらともいえない", "4 - まあ大切だと思う", "5 - とても大切だと思う"]
     }
 ];
 
@@ -257,6 +257,9 @@ class SurveyApp {
             case 'rating':
                 questionGroup.appendChild(this.createRatingOptions(question));
                 break;
+            case 'likert':
+                questionGroup.appendChild(this.createLikertOptions(question));
+                break;
             case 'text':
                 questionGroup.appendChild(this.createTextInput(question));
                 break;
@@ -344,6 +347,32 @@ class SurveyApp {
         });
         
         return ratingGroup;
+    }
+
+    createLikertOptions(question) {
+        const likertGroup = document.createElement('div');
+        likertGroup.className = 'likert-group';
+        
+        question.options.forEach((option, index) => {
+            const likertOption = document.createElement('div');
+            likertOption.className = 'likert-option';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `question_${question.id}`;
+            input.id = `q${question.id}_likert${index}`;
+            input.value = option;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `q${question.id}_likert${index}`;
+            label.textContent = option;
+            
+            likertOption.appendChild(input);
+            likertOption.appendChild(label);
+            likertGroup.appendChild(likertOption);
+        });
+        
+        return likertGroup;
     }
 
     createTextInput(question) {
