@@ -113,7 +113,7 @@ const japaneseQuestionsSection1 = [
         id: 6,
         type: "radio",
         question: "現在の就業状況：",
-        options: ["正社員（フルタイム）", "契約社員・派遣社員", "パート・アルバイト", "学生", "無職", "その他"]
+        options: ["正社員（フルタイム）", "パート・アルバイト", "契約社員・派遣社員", "自営業・フリーランス", "学生", "無職", "その他"]
     },
     {
         id: 7,
@@ -124,8 +124,8 @@ const japaneseQuestionsSection1 = [
     {
         id: 8,
         type: "likert",
-        question: "環境や社会のための取り組み（例：エコ、リサイクル）は、どのくらい大切だと思いますか？",
-        options: ["1 - 全く大切だと思わない", "2 - あまり大切だと思わない", "3 - どちらともいえない", "4 - まあ大切だと思う", "5 - とても大切だと思う"]
+        question: "環境や社会のための取り組み（例：気候変動対策、公正な労働条件）は、どのくらい大切だと思いますか？<br><br>(1 = 全く大切だと思いません … 5 = とても大切だと思います)",
+        options: ["1", "2", "3", "4", "5"]
     }
 ];
 
@@ -133,32 +133,118 @@ const japaneseQuestionsSection1 = [
 const japaneseQuestionsSection2 = [
     {
         id: 9,
-        type: "likert",
-        question: "次の文にどの程度同意しますか？(1 = 全くそう思わない … 5 = とてもそう思う)",
+        type: "likert-multiple",
+        question: "次の文にどの程度同意しますか？<br><br>(1 = 全くそう思いません … 5 = とてもそう思います)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "独立して行動するよりも、グループの一員であるほうがよい。",
-            "意思決定は集団で行うことが重要だと思う。",
-            "調和と合意を保つことが大切だと思う。"
+            "独立して行動するよりも、グループの一員であるほうがよいと思います。",
+            "意思決定は集団で行うことが重要だと思います。",
+            "調和と合意を保つことが大切だと思います。"
         ]
     },
     {
         id: 10,
         type: "radio",
-        question: "🔎 操作チェック（広告内容の確認）<br><br>表示された広告の主な内容は何でしたか？",
+        question: "表示された広告の主な内容は何でしたか？",
         options: ["環境や持続可能性", "製品の味や楽しみ方", "特に強調点のない一般的な情報", "その他"]
     },
     {
         id: 11,
         type: "likert-multiple",
-        question: "🏭 製造元に関する評価<br><br>次の文にどの程度同意しますか？(1 = 全くそう思わない … 5 = とてもそう思う)",
+        question: "次の文にどの程度同意しますか？<br><br>(1 = 全くそう思いません … 5 = とてもそう思います)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "この製造元を信頼できると思う。",
-            "製造元は誠実に情報を伝えていると感じる。",
-            "製造元は信頼できると考える。",
-            "製造元は責任ある行動を取っていると思う。",
-            "広告メッセージは本物らしいと感じる。"
+            "この製造元を信頼できると思います。",
+            "製造元は誠実に情報を伝えていると感じます。",
+            "製造元は信頼できると考えます。",
+            "製造元は責任ある行動を取っていると思います。",
+            "広告メッセージは本物らしいと感じます。"
+        ]
+    }
+];
+
+// German questions for Section 1 (Basic Information)
+const germanQuestionsSection1 = [
+    {
+        id: 1,
+        type: "radio",
+        question: "Alter:",
+        options: ["18–24 Jahre", "25–34 Jahre", "35–44 Jahre", "45–54 Jahre", "55–64 Jahre", "65 Jahre oder älter"]
+    },
+    {
+        id: 2,
+        type: "radio",
+        question: "Geschlecht:",
+        options: ["Männlich", "Weiblich", "Divers", "Keine Angabe"]
+    },
+    {
+        id: 3,
+        type: "radio",
+        question: "Wohnsitzland:",
+        options: ["Deutschland", "Japan", "Anderes"]
+    },
+    {
+        id: 4,
+        type: "radio",
+        question: "Kulturelle Zugehörigkeit (Selbstidentifikation):",
+        options: ["Deutsch", "Japanisch", "Andere"]
+    },
+    {
+        id: 5,
+        type: "radio",
+        question: "Bildungsstand:",
+        options: ["Abitur / Matura", "Berufsausbildung / Fachschule", "Bachelor / Hochschulabschluss", "Master / Promotion", "Anderes"]
+    },
+    {
+        id: 6,
+        type: "radio",
+        question: "Beschäftigungsstatus:",
+        options: ["Vollzeit angestellt (Festanstellung)", "Teilzeit angestellt", "Befristet / Leiharbeit (Vertrag oder Zeitarbeit)", "Selbstständig / Freiberuflich", "Student/in", "Arbeitslos / Nicht erwerbstätig", "Anderes"]
+    },
+    {
+        id: 7,
+        type: "radio",
+        question: "Monatliches verfügbares Konsumeinkommen (netto) (freiwillig):",
+        options: ["Unter 2.500 €", "2.500 – 3.000 €", "3.000 – 3.500 €", "3.500 – 4.000 €", "Über 4.000 €"]
+    },
+    {
+        id: 8,
+        type: "likert",
+        question: "Wie wichtig finden Sie Maßnahmen für Umwelt und Gesellschaft (z. B. Klimaschutz, faire Arbeitsbedingungen)?<br><br>(1 = gar nicht wichtig … 5 = sehr wichtig)",
+        options: ["1", "2", "3", "4", "5"]
+    }
+];
+
+// German questions for Section 2 (Cultural Orientation)
+const germanQuestionsSection2 = [
+    {
+        id: 9,
+        type: "likert-multiple",
+        question: "Inwieweit stimmen Sie den folgenden Aussagen zu?<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
+        options: ["1", "2", "3", "4", "5"],
+        statements: [
+            "Ich bin lieber Teil einer Gruppe als unabhängig zu handeln.",
+            "Es ist mir wichtig, dass Entscheidungen gemeinschaftlich getroffen werden.",
+            "Ich finde es wichtig, Harmonie und Konsens zu bewahren."
+        ]
+    },
+    {
+        id: 10,
+        type: "radio",
+        question: "Manipulationscheck (Werbeinhalte erkennen)<br><br>Worauf lag der Schwerpunkt der angezeigten Werbung?",
+        options: ["Umwelt und Nachhaltigkeit", "Produktgenuss oder Geschmack", "Allgemeine Informationen ohne Schwerpunkt", "Anderes"]
+    },
+    {
+        id: 11,
+        type: "likert-multiple",
+        question: "Einstellungen gegenüber dem Hersteller<br><br>Bitte geben Sie an, inwieweit Sie den folgenden Aussagen zustimmen.<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
+        options: ["1", "2", "3", "4", "5"],
+        statements: [
+            "Ich vertraue dem Hersteller des Produkts.",
+            "Ich habe den Eindruck, dass der Hersteller ehrlich kommuniziert.",
+            "Ich halte den Hersteller für glaubwürdig.",
+            "Ich denke, dass der Hersteller verantwortungsvoll handelt.",
+            "Die Werbebotschaft erscheint mir authentisch."
         ]
     }
 ];
@@ -235,9 +321,17 @@ class SurveyApp {
         // Store the selected video URL for this survey
         this.currentVideoUrl = `https://www.youtube.com/embed/${selectedVideo.id}`;
         
-        // Update title with language indicator for testing
-        const languageIndicator = this.selectedLanguage === 'german' ? '🇩🇪 GERMAN' : '🇯🇵 JAPANESE';
-        document.querySelector('.title').textContent = `${this.currentSurvey.title} - ${languageIndicator}`;
+        // Update title based on language
+        if (this.selectedLanguage === 'japanese') {
+            document.querySelector('.title').textContent = 'Leviteaに関するアンケート';
+            document.querySelector('.subtitle').textContent = '（この調査は匿名で行われ、回答は研究目的でのみ使用されます。所要時間は約4分です。）';
+        } else if (this.selectedLanguage === 'german') {
+            document.querySelector('.title').textContent = 'Levitea Umfrage';
+            document.querySelector('.subtitle').textContent = '(Diese Umfrage wird anonym durchgeführt und die Antworten werden nur zu Forschungszwecken verwendet. Dauer: ca. 4 Minuten.)';
+        } else {
+            document.querySelector('.title').textContent = this.currentSurvey.title;
+            document.querySelector('.subtitle').textContent = 'Your feedback helps us improve our research';
+        }
         
         // Load survey questions
         this.renderSurvey();
@@ -252,6 +346,9 @@ class SurveyApp {
         if (this.selectedLanguage === 'japanese') {
             // Render Japanese survey with sections
             this.renderJapaneseSurvey();
+        } else if (this.selectedLanguage === 'german') {
+            // Render German survey with sections
+            this.renderGermanSurvey();
         } else {
             // Render English survey
             universalQuestions.forEach(question => {
@@ -284,7 +381,18 @@ class SurveyApp {
         const firstSection2Question = this.createQuestionElement(japaneseQuestionsSection2[0]);
         this.surveyContent.appendChild(firstSection2Question);
         
-        // Add video after first question of Section 2
+        // Add disclaimer and video after first question of Section 2
+        const disclaimerContainer = document.createElement('div');
+        disclaimerContainer.className = 'disclaimer-container';
+        disclaimerContainer.innerHTML = `
+            <div class="disclaimer-text">
+                <strong>調査に関する注意:</strong><br>
+                これから、架空の飲料 Levitea の広告をご覧いただきます。<br>
+                広告のメッセージに注目し、映像の質は評価対象外としてください。
+            </div>
+        `;
+        this.surveyContent.appendChild(disclaimerContainer);
+        
         const videoContainer = document.createElement('div');
         videoContainer.className = 'video-container';
         videoContainer.innerHTML = `
@@ -302,6 +410,62 @@ class SurveyApp {
         // Add remaining Section 2 questions
         for (let i = 1; i < japaneseQuestionsSection2.length; i++) {
             const questionElement = this.createQuestionElement(japaneseQuestionsSection2[i]);
+            this.surveyContent.appendChild(questionElement);
+        }
+    }
+
+    renderGermanSurvey() {
+        // Section 1: Basic Information
+        const section1Header = document.createElement('div');
+        section1Header.className = 'section-header';
+        section1Header.innerHTML = '<h2>Demografische Fragen</h2>';
+        this.surveyContent.appendChild(section1Header);
+        
+        // Add Section 1 questions
+        germanQuestionsSection1.forEach(question => {
+            const questionElement = this.createQuestionElement(question);
+            this.surveyContent.appendChild(questionElement);
+        });
+        
+        // Section 2: Cultural Orientation
+        const section2Header = document.createElement('div');
+        section2Header.className = 'section-header';
+        section2Header.innerHTML = '<h2>Kulturelle Orientierung</h2>';
+        this.surveyContent.appendChild(section2Header);
+        
+        // Add first question of Section 2
+        const firstSection2Question = this.createQuestionElement(germanQuestionsSection2[0]);
+        this.surveyContent.appendChild(firstSection2Question);
+        
+        // Add disclaimer and video after first question of Section 2
+        const disclaimerContainer = document.createElement('div');
+        disclaimerContainer.className = 'disclaimer-container';
+        disclaimerContainer.innerHTML = `
+            <div class="disclaimer-text">
+                <strong>Hinweis zur Studie:</strong><br>
+                Sie werden nun eine Werbung für das fiktive Getränk Levitea sehen.<br>
+                Bitte konzentrieren Sie sich auf die Werbebotschaft und bewerten Sie nicht die Videoqualität.
+            </div>
+        `;
+        this.surveyContent.appendChild(disclaimerContainer);
+        
+        const videoContainer = document.createElement('div');
+        videoContainer.className = 'video-container';
+        videoContainer.innerHTML = `
+            <iframe 
+                width="100%" 
+                height="315" 
+                src="${this.currentVideoUrl}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        `;
+        this.surveyContent.appendChild(videoContainer);
+        
+        // Add remaining Section 2 questions
+        for (let i = 1; i < germanQuestionsSection2.length; i++) {
+            const questionElement = this.createQuestionElement(germanQuestionsSection2[i]);
             this.surveyContent.appendChild(questionElement);
         }
     }
@@ -592,6 +756,47 @@ class SurveyApp {
                     }
                 }
             });
+        } else if (this.selectedLanguage === 'german') {
+            // Collect German Section 1 responses
+            germanQuestionsSection1.forEach(question => {
+                const questionName = `question_${question.id}`;
+                
+                if (question.type === 'checkbox') {
+                    const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else {
+                    const element = document.querySelector(`[name="${questionName}"]`);
+                    if (element) {
+                        formData.responses[question.id] = element.value;
+                    }
+                }
+            });
+            
+            // Collect German Section 2 responses
+            germanQuestionsSection2.forEach(question => {
+                if (question.type === 'likert-multiple') {
+                    // Handle multiple statements with individual Likert scales
+                    const statementResponses = [];
+                    question.statements.forEach((statement, statementIndex) => {
+                        const questionName = `question_${question.id}_statement_${statementIndex}`;
+                        const element = document.querySelector(`[name="${questionName}"]:checked`);
+                        statementResponses.push(element ? element.value : '');
+                    });
+                    formData.responses[question.id] = statementResponses;
+                } else {
+                    const questionName = `question_${question.id}`;
+                    
+                    if (question.type === 'checkbox') {
+                        const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
+                        formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                    } else {
+                        const element = document.querySelector(`[name="${questionName}"]`);
+                        if (element) {
+                            formData.responses[question.id] = element.value;
+                        }
+                    }
+                }
+            });
         } else {
             // Collect English responses
             universalQuestions.forEach(question => {
@@ -669,7 +874,7 @@ class SurveyApp {
                 <h2 style="color: #667eea; margin-bottom: 16px;">🎉 Thank You!</h2>
                 <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 24px;">
                     Your survey response has been submitted successfully.<br>
-                    <small style="color: #888;">Language: ${this.selectedLanguage === 'german' ? '🇩🇪 German' : '🇯🇵 Japanese'}</small>
+                    <small style="color: #888;">Language: ${this.selectedLanguage === 'german' ? '🇩🇪 German' : this.selectedLanguage === 'japanese' ? '🇯🇵 Japanese' : '🇺🇸 English'}</small>
                 </p>
                 <button onclick="location.reload()" class="submit-btn" style="background: linear-gradient(135deg, #48bb78, #38a169);">
                     Take Another Survey

@@ -70,6 +70,27 @@ function formatSurveyData(data) {
     ];
     
     responses = [...section1Responses, ...section2Responses];
+  } else if (data.language === 'german') {
+    // German questions (Section 1 - Basic Information)
+    const section1Responses = [
+      data.responses[1] || '', // Alter (Age)
+      data.responses[2] || '', // Geschlecht (Gender)
+      data.responses[3] || '', // Wohnsitzland (Country of Residence)
+      data.responses[4] || '', // Kulturelle Zugehörigkeit (Cultural Affiliation)
+      data.responses[5] || '', // Bildungsstand (Education)
+      data.responses[6] || '', // Beschäftigungsstatus (Employment Status)
+      data.responses[7] || '', // Monatliches verfügbares Konsumeinkommen (Monthly Disposable Income)
+      data.responses[8] || ''  // Umweltbewusstsein (Environmental Awareness)
+    ];
+    
+    // German questions (Section 2 - Cultural Orientation)
+    const section2Responses = [
+      data.responses[9] || '', // Kulturelle Orientierung (Cultural Orientation)
+      data.responses[10] || '', // Manipulationscheck (Manipulation Check)
+      Array.isArray(data.responses[11]) ? data.responses[11].join(', ') : data.responses[11] || '' // Einstellungen gegenüber dem Hersteller (Manufacturer Evaluation)
+    ];
+    
+    responses = [...section1Responses, ...section2Responses];
   } else {
     // English questions (original universal questions)
     responses = [
@@ -113,6 +134,27 @@ function createHeaders(language) {
       '文化的志向 (Cultural Orientation)',
       '操作チェック (Manipulation Check)',
       '製造元に関する評価 (Manufacturer Evaluation)'
+    ];
+    
+    questionHeaders = [...section1Headers, ...section2Headers];
+  } else if (language === 'german') {
+    // German question headers (Section 1 - Basic Information)
+    const section1Headers = [
+      'Alter (Age)',
+      'Geschlecht (Gender)',
+      'Wohnsitzland (Country of Residence)',
+      'Kulturelle Zugehörigkeit (Cultural Affiliation)',
+      'Bildungsstand (Education)',
+      'Beschäftigungsstatus (Employment Status)',
+      'Monatliches verfügbares Konsumeinkommen (Monthly Disposable Income)',
+      'Umweltbewusstsein (Environmental Awareness)'
+    ];
+    
+    // German question headers (Section 2 - Cultural Orientation)
+    const section2Headers = [
+      'Kulturelle Orientierung (Cultural Orientation)',
+      'Manipulationscheck (Manipulation Check)',
+      'Einstellungen gegenüber dem Hersteller (Manufacturer Evaluation)'
     ];
     
     questionHeaders = [...section1Headers, ...section2Headers];
