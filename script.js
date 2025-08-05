@@ -980,7 +980,7 @@ class SurveyApp {
             console.log('📤 Sending data to Google Sheets:', formData);
             
             // Send to Google Sheets via Apps Script
-            const response = await fetch('https://script.google.com/macros/s/AKfycbzVwVYCgs1V6joefb3df5kyCth0EVgfxzqU4-uyqLvst-DCnwIHaPt_kGnPL3HvqMAm0w/exec', {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbwVVAixDO1RXnLUZFO1cBhb8_fRVdU48dG_r39uFRDrZOSgqFktgODXjAQPjKwcaIDr/exec', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
