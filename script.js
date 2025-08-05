@@ -137,11 +137,9 @@ const japaneseQuestionsSection2 = [
         question: "次の文にどの程度同意しますか？<br><br>(1 = 全くそう思いません … 5 = とてもそう思います)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "この製造元を信頼できると思います。",
-            "製造元は信頼できて、信頼性が高いと思います。",
-            "製造元は、環境や社会に対して責任ある行動を取っていると思います。",
-            "製造元は誠実に情報を伝えていると感じます。",
-            "広告メッセージは本物らしいと感じます。"
+            "独立して行動するよりも、グループの一員であるほうがよいと思います。",
+            "意思決定は集団で行うことが重要だと思います。",
+            "調和と合意を保つことが大切だと思います。"
         ]
     },
     {
@@ -157,9 +155,9 @@ const japaneseQuestionsSection2 = [
         options: ["1", "2", "3", "4", "5"],
         statements: [
             "この製造元を信頼できると思います。",
+            "製造元は信頼できて、信頼性が高いと思います。",
+            "製造元は、環境や社会に対して責任ある行動を取っていると思います。",
             "製造元は誠実に情報を伝えていると感じます。",
-            "製造元は信頼できると考えます。",
-            "製造元は責任ある行動を取っていると思います。",
             "広告メッセージは本物らしいと感じます。"
         ]
     }
@@ -222,14 +220,12 @@ const germanQuestionsSection2 = [
     {
         id: 9,
         type: "likert-multiple",
-        question: "Bitte geben Sie an, inwieweit Sie den folgenden Aussagen zustimmen.<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
+        question: "Inwieweit stimmen Sie den folgenden Aussagen zu?<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "Ich vertraue dem Hersteller des Produkts.",
-            "Ich halte den Hersteller für glaubwürdig und zuverlässig.",
-            "Ich denke, dass der Hersteller verantwortungsvoll mit Umwelt und Gesellschaft umgeht.",
-            "Ich habe den Eindruck, dass der Hersteller ehrlich kommuniziert.",
-            "Die Werbebotschaft erscheint mir authentisch."
+            "Ich bin lieber Teil einer Gruppe als unabhängig zu handeln.",
+            "Es ist mir wichtig, dass Entscheidungen gemeinschaftlich getroffen werden.",
+            "Ich finde es wichtig, Harmonie und Konsens zu bewahren."
         ]
     },
     {
@@ -241,13 +237,13 @@ const germanQuestionsSection2 = [
     {
         id: 11,
         type: "likert-multiple",
-        question: "Einstellungen gegenüber dem Hersteller<br><br>Bitte geben Sie an, inwieweit Sie den folgenden Aussagen zustimmen.<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
+        question: "Bitte geben Sie an, inwieweit Sie den folgenden Aussagen zustimmen.<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
             "Ich vertraue dem Hersteller des Produkts.",
+            "Ich halte den Hersteller für glaubwürdig und zuverlässig.",
+            "Ich denke, dass der Hersteller verantwortungsvoll mit Umwelt und Gesellschaft umgeht.",
             "Ich habe den Eindruck, dass der Hersteller ehrlich kommuniziert.",
-            "Ich halte den Hersteller für glaubwürdig.",
-            "Ich denke, dass der Hersteller verantwortungsvoll handelt.",
             "Die Werbebotschaft erscheint mir authentisch."
         ]
     }
@@ -746,6 +742,9 @@ class SurveyApp {
                     const element = document.querySelector(`[name="${questionName}"]`);
                     if (element) {
                         formData.responses[question.id] = element.value;
+                        console.log(`Japanese Q${question.id}: ${element.value}`);
+                    } else {
+                        console.log(`Japanese Q${question.id}: Element not found for ${questionName}`);
                     }
                 }
             });
@@ -787,6 +786,9 @@ class SurveyApp {
                     const element = document.querySelector(`[name="${questionName}"]`);
                     if (element) {
                         formData.responses[question.id] = element.value;
+                        console.log(`German Q${question.id}: ${element.value}`);
+                    } else {
+                        console.log(`German Q${question.id}: Element not found for ${questionName}`);
                     }
                 }
             });
