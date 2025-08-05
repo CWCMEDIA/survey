@@ -5,33 +5,54 @@ function doPost(e) {
   try {
     // Parse the incoming data
     const data = JSON.parse(e.postData.contents);
+    
+    console.log('Received data:', data);
 
-    // Open your Google Sheet explicitly by URL
-    const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1WXVMJOoWf1wk59JpgyFa7W2dXHd0bO1UVXqYQud4218/edit");
-    const sheet = spreadsheet.getSheetByName("Survey Data Collection"); // Matches your sheet tab title
+    // Directly open the specific spreadsheet by URL
+    const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11nZZc3-0taBL0hxGX0XjmCw4U3bYi_w7JMxNWMpO8hY/edit");
+    const sheet = spreadsheet.getSheetByName("Survey Answers");
+    
+    console.log('Sheet found:', sheet.getName());
+    console.log('Current row count:', sheet.getLastRow());
 
     // Prepare the row data with proper formatting for German/Japanese surveys
-    const rowData = formatSurveyData(data);
+    const rowData = formatSurveyData(data, sheet);
+    
+    console.log('Row data to append:', rowData);
 
     // Add the data as a new row
     sheet.appendRow(rowData);
+    
+    console.log('Row appended successfully');
 
     // Auto-resize columns for better readability
     autoResizeColumns(sheet);
 
-    // Return success response
+    // Return success response with CORS headers
     return ContentService
-      .createTextOutput(JSON.stringify({ success: true, message: "Data received successfully" }))
-      .setMimeType(ContentService.MimeType.JSON);
+      .createTextOutput(JSON.stringify({ 
+        success: true, 
+        message: "Data received successfully",
+        rowCount: sheet.getLastRow()
+      }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   } catch (error) {
-    // Return error response
+    console.error('Error in doPost:', error);
+    // Return error response with CORS headers
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
-        error: error.toString()
+        error: error.toString(),
+        stack: error.stack
       }))
-      .setMimeType(ContentService.MimeType.JSON);
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
 }
 
@@ -39,19 +60,25 @@ function doPost(e) {
 function doOptions(e) {
   return ContentService
     .createTextOutput('')
-    .setMimeType(ContentService.MimeType.TEXT);
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
 // Format survey data into a single row for the sheet
-function formatSurveyData(data) {
+function formatSurveyData(data, sheet) {
   const timestamp = new Date(data.timestamp);
   const formattedDate = timestamp.toLocaleString();
   
+  console.log('Formatting data for language:', data.language);
+  
   // Create headers if this is the first submission
-  const sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1WXVMJOoWf1wk59JpgyFa7W2dXHd0bO1UVXqYQud4218/edit").getSheetByName("Survey Data Collection");
   if (sheet.getLastRow() === 0) {
+    console.log('Creating headers for first submission');
     const headers = createHeaders(data.language);
     sheet.appendRow(headers);
+    console.log('Headers created:', headers);
   }
   
   // Format the responses based on language
@@ -197,11 +224,72 @@ function autoResizeColumns(sheet) {
 
 // Test function to verify the setup
 function testConnection() {
-  return ContentService
-    .createTextOutput(JSON.stringify({ 
-      success: true, 
-      message: "Google Apps Script is working correctly",
-      timestamp: new Date().toISOString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11nZZc3-0taBL0hxGX0XjmCw4U3bYi_w7JMxNWMpO8hY/edit");
+    const sheet = spreadsheet.getSheetByName("Survey Answers");
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({ 
+        success: true, 
+        message: "Google Apps Script is working correctly",
+        timestamp: new Date().toISOString(),
+        sheetName: sheet.getName(),
+        rowCount: sheet.getLastRow(),
+        columnCount: sheet.getLastColumn()
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ 
+        success: false, 
+        error: error.toString(),
+        message: "Failed to connect to Google Sheet"
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Test function to add sample data manually
+function testAddSampleData() {
+  try {
+    const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11nZZc3-0taBL0hxGX0XjmCw4U3bYi_w7JMxNWMpO8hY/edit");
+    const sheet = spreadsheet.getSheetByName("Survey Answers");
+    
+    // Create sample data
+    const sampleData = {
+      surveyId: 1,
+      surveyTitle: "Test Survey",
+      language: "german",
+      videoUrl: "https://youtu.be/test",
+      timestamp: new Date().toISOString(),
+      responses: {
+        1: "25–34 Jahre",
+        2: "Männlich",
+        3: "Deutschland",
+        4: "Deutsch",
+        5: "Bachelor / Hochschulabschluss",
+        6: "Vollzeit angestellt (Festanstellung)",
+        7: "1.600 – 2.800 €",
+        8: "4",
+        9: ["3", "4", "3"],
+        10: "Umwelt und Nachhaltigkeit",
+        11: ["4", "3", "4", "3", "4"]
+      }
+    };
+    
+    // Format the data
+    const rowData = formatSurveyData(sampleData, sheet);
+    
+    // Add the data
+    sheet.appendRow(rowData);
+    
+    console.log('✅ Sample data added successfully');
+    console.log('Row count:', sheet.getLastRow());
+    
+    return "Sample data added successfully! Check your Google Sheet.";
+    
+  } catch (error) {
+    console.error('❌ Error adding sample data:', error);
+    return "Error: " + error.toString();
+  }
 } 

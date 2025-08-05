@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google Apps Script</title>
+</head>
+<body>
+    <h1>Test Google Apps Script Submission</h1>
+    <button onclick="testSubmission()">Test Submit to Google Sheets</button>
+    <div id="result"></div>
+
+    <script>
+        async function testSubmission() {
+            const testData = {
+                surveyId: 1,
+                surveyTitle: "Test Survey",
+                language: "german",
+                videoUrl: "https://youtu.be/test",
+                timestamp: new Date().toISOString(),
+                responses: {
+                    1: "25–34 Jahre",
+                    2: "Männlich",
+                    3: "Deutschland",
+                    4: "Deutsch",
+                    5: "Bachelor / Hochschulabschluss",
+                    6: "Vollzeit angestellt (Festanstellung)",
+                    7: "1.600 – 2.800 €",
+                    8: "4",
+                    9: ["3", "4", "3"],
+                    10: "Umwelt und Nachhaltigkeit",
+                    11: ["4", "3", "4", "3", "4"]
+                }
+            };
+
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwGXSMHhPvCIXD8MzBdyeosC5kJo-UnwsDcLYNvHBut_qQCcJK-owBWfFA7syFCMyITIA/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>Result:</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.toString()}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html> 

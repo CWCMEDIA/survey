@@ -973,74 +973,51 @@ class SurveyApp {
     }
 
     async sendToGoogleSheets(formData) {
-        // Simple method: Store in localStorage and show success
-        // This will work 100% of the time without any CORS issues
-        
         try {
-            // Store the data locally
+            // Store the data locally as backup
             this.storeSubmission(formData);
             
-            // Also try to send via simple form submission (no CORS issues)
-            this.sendViaSimpleForm(formData);
+            console.log('📤 Sending data to Google Sheets:', formData);
             
-            return { success: true, message: "Data stored successfully" };
-            
-        } catch (error) {
-            console.error('Error storing data:', error);
-            throw error;
-        }
-    }
-    
-    sendViaSimpleForm(formData) {
-        // Method 1: Simple form submission (no CORS issues)
-        const hiddenForm = document.getElementById('hiddenForm');
-        const surveyDataInput = document.getElementById('surveyDataInput');
-        
-        if (hiddenForm && surveyDataInput) {
-            // Format the data for better readability in Formspree
-            const formattedData = {
-                survey_id: formData.surveyId,
-                survey_title: formData.surveyTitle,
-                language: formData.language,
-                video_url: formData.videoUrl,
-                timestamp: formData.timestamp,
-                responses: formData.responses
-            };
-            
-            surveyDataInput.value = JSON.stringify(formattedData, null, 2);
-            console.log('Submitting to Formspree:', formattedData);
-            
-            // Submit the form
-            hiddenForm.submit();
-            
-            // Also try to send via fetch as backup
-            this.sendViaFetch(formattedData);
-        } else {
-            console.error('Hidden form elements not found');
-        }
-    }
-    
-    async sendViaFetch(formData) {
-        try {
-            const response = await fetch('https://formspree.io/f/mjkoavgy', {
+            // Send to Google Sheets via Apps Script
+            const response = await fetch('https://script.google.com/macros/s/AKfycbzVwVYCgs1V6joefb3df5kyCth0EVgfxzqU4-uyqLvst-DCnwIHaPt_kGnPL3HvqMAm0w/exec', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    survey_data: JSON.stringify(formData, null, 2)
-                })
+                body: JSON.stringify(formData)
             });
             
+            console.log('📥 Response status:', response.status);
+            
             if (response.ok) {
-                console.log('✅ Data sent to Formspree via fetch successfully');
+                const result = await response.json();
+                console.log('📥 Response data:', result);
+                
+                if (result.success) {
+                    console.log('✅ Data sent to Google Sheets successfully');
+                    console.log('📊 Row count:', result.rowCount);
+                    return { success: true, message: "Data sent to Google Sheets successfully" };
+                } else {
+                    console.error('❌ Google Sheets error:', result.error);
+                    console.error('❌ Error stack:', result.stack);
+                    return { success: false, error: result.error };
+                }
             } else {
-                console.log('⚠️ Formspree fetch failed, but form submission should work');
+                const errorText = await response.text();
+                console.error('❌ HTTP error:', response.status);
+                console.error('❌ Error response:', errorText);
+                return { success: false, error: `HTTP ${response.status}: ${errorText}` };
             }
+            
         } catch (error) {
-            console.log('⚠️ Fetch failed, but form submission should work:', error);
+            console.error('❌ Network error:', error);
+            // Return success anyway since we stored locally
+            return { success: true, message: "Data stored locally due to network error" };
         }
     }
+    
+
     
     emailSurveyData(formData) {
         // Create a mailto link with the survey data

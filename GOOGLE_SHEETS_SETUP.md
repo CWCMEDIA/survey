@@ -1,134 +1,83 @@
-# 📊 Google Sheets Integration Setup Guide
+# Google Sheets Setup Guide
 
-Follow these steps to connect your survey to Google Sheets and collect responses automatically.
+## Step 1: Create Google Apps Script
 
-## 🚀 Step 1: Create a Google Sheet
+1. Go to [Google Apps Script](https://script.google.com/)
+2. Click "New Project"
+3. Delete the default code and paste the contents of `google-apps-script.js`
+4. Save the project with a name like "Survey Data Collection"
 
-1. Go to [Google Sheets](https://sheets.google.com)
-2. Create a new blank spreadsheet
-3. Name it something like "Survey Responses"
-4. Keep it open - you'll need it for the next steps
+## Step 2: Deploy as Web App
 
-## 🔧 Step 2: Set Up Google Apps Script
+1. Click "Deploy" → "New deployment"
+2. Choose "Web app" as the type
+3. Set the following settings:
+   - **Execute as**: "Me" (your Google account)
+   - **Who has access**: "Anyone" (for public access)
+4. Click "Deploy"
+5. **Copy the Web App URL** - you'll need this for the next step
 
-1. **Open Google Apps Script:**
-   - Go to [script.google.com](https://script.google.com)
-   - Click "New Project"
-   - Name it "Survey Data Collector"
+## Step 3: Update Survey Code
 
-2. **Copy the Script Code:**
-   - Delete the default `myFunction()` code
-   - Copy all the code from `google-apps-script.js` file
-   - Paste it into the Apps Script editor
+1. Open `script.js` in your survey project
+2. Find this line:
+   ```javascript
+   const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL_HERE', {
+   ```
+3. Replace `'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'` with your actual Web App URL from Step 2
 
-3. **Save the Project:**
-   - Click "Save" (💾 icon)
-   - Name it "Survey Data Collector"
+## Step 4: Create Google Sheet
 
-## 🌐 Step 3: Deploy as Web App
+1. Go to [Google Sheets](https://sheets.google.com/)
+2. Create a new spreadsheet
+3. Rename the first sheet to "Survey Answers"
+4. **Important**: Make sure this sheet is completely blank (no headers yet)
 
-1. **Deploy the Script:**
-   - Click "Deploy" → "New deployment"
-   - Click the gear icon ⚙️ next to "Select type"
-   - Choose "Web app"
+## Step 5: Link Apps Script to Sheet
 
-2. **Configure the Deployment:**
-   - **Description:** "Survey Data Collector v1"
-   - **Execute as:** "Me" (your Google account)
-   - **Who has access:** "Anyone" (for now, you can restrict later)
-   - Click "Deploy"
+1. Go back to your Google Apps Script project
+2. In the Apps Script editor, you'll see a dropdown next to "Files" 
+3. Click on it and select your Google Sheet (the one with "Survey Answers")
+4. This links the script to your specific sheet
 
-3. **Authorize the App:**
-   - Click "Authorize access"
-   - Choose your Google account
-   - Click "Advanced" → "Go to Survey Data Collector (unsafe)"
-   - Click "Allow"
+## Step 6: Test the Setup
 
-4. **Copy the Web App URL:**
-   - You'll get a URL like: `https://script.google.com/macros/s/AKfycbz.../exec`
-   - Copy this URL - you'll need it for the next step
+1. Deploy your survey to a web server
+2. Fill out a test survey
+3. Check your Google Sheet - you should see:
+   - Headers automatically created on first submission
+   - Survey data in new rows
+   - Proper formatting for German/Japanese responses
 
-## 🔗 Step 4: Connect Your Survey
+## Troubleshooting
 
-1. **Update the JavaScript:**
-   - Open `script.js` in your survey project
-   - Find line with `const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';`
-   - Replace `'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'` with your actual web app URL
-   - Save the file
+### If data isn't appearing in the sheet:
+1. Check that the sheet name is exactly "Survey Answers"
+2. Verify the Apps Script is linked to the correct spreadsheet
+3. Check the browser console for error messages
+4. Ensure the Web App URL is correct in your JavaScript code
 
-2. **Test the Connection:**
-   - Open your survey in a browser
-   - Fill out a test survey and submit
-   - Check your Google Sheet - you should see the data appear!
+### If you get CORS errors:
+1. Make sure the Web App is deployed with "Anyone" access
+2. Check that the Apps Script URL is correct
+3. The survey will still store data locally as backup
 
-## 📋 Step 5: Format Your Google Sheet (Optional)
+### If headers aren't created:
+1. Make sure the sheet is completely blank initially
+2. The headers will be created automatically on the first submission
 
-1. **Run the Setup Function:**
-   - Go back to your Google Apps Script
-   - In the function dropdown, select `setupSheetFormatting`
-   - Click the "Run" button ▶️
-   - This will format your sheet with headers and styling
+## Data Format
 
-2. **Manual Formatting (Alternative):**
-   - In your Google Sheet, select the header row
-   - Make it bold and center-aligned
-   - Add a background color
-   - Freeze the first row
+The survey will create columns for:
+- Timestamp
+- Survey ID
+- Survey Title  
+- Language
+- Video URL
+- All survey responses (formatted based on language)
 
-## 🎯 What You'll See in Your Sheet
-
-Each survey submission will create a new row with:
-
-| Column | Description |
-|--------|-------------|
-| Timestamp | When the survey was submitted |
-| Survey ID | 1, 2, or 3 (which survey) |
-| Survey Title | Full survey name |
-| Language | German or Japanese |
-| Question 1-5 | The actual responses |
-
-## 🔒 Security Notes
-
-- **For Production:** Change "Who has access" to "Anyone with Google Account" or restrict further
-- **Rate Limiting:** Google Apps Script has daily quotas, but they're generous for surveys
-- **Data Backup:** Consider exporting data regularly
-
-## 🐛 Troubleshooting
-
-### "Script not found" Error
-- Make sure you deployed the script as a web app
-- Check that the URL is correct in your JavaScript
-
-### "Authorization required" Error
-- Make sure you authorized the script when deploying
-- Try redeploying and re-authorizing
-
-### Data not appearing in sheet
-- Check the browser console for errors
-- Make sure your Google Sheet is the active spreadsheet
-- Try running the `setupSheetFormatting` function
-
-### CORS Errors
-- This is normal for local testing
-- Upload your survey to a web server for production use
-
-## 📊 Sample Data Structure
-
-Your sheet will look like this:
-
-```
-Timestamp           | Survey ID | Survey Title                    | Language | Q1        | Q2        | Q3                    | Q4                    | Q5
-2024-01-15 14:30:25 | 1         | Technology Preferences Survey  | german   | Instagram | 4         | Smartphone, Laptop    | Slow internet         | Fast and reliable...
-2024-01-15 14:35:12 | 2         | Food & Lifestyle Survey        | japanese | Italian   | 3         | Avocado Toast, Bubble | Pizza with pineapple  | Spaghetti carbonara...
-```
-
-## 🎉 You're All Set!
-
-Once you've completed these steps:
-1. Your survey will automatically send data to Google Sheets
-2. Each submission creates a new row
-3. Data is formatted and organized
-4. You can analyze responses directly in Google Sheets
-5. Export to Excel or other formats as needed
-
-The integration is now complete! Test it out and let me know if you need any adjustments. 🚀 
+For German/Japanese surveys, this includes:
+- Basic demographic information
+- Cultural orientation questions
+- Video-related questions
+- Manufacturer evaluation questions 
