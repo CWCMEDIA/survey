@@ -124,7 +124,7 @@ const japaneseQuestionsSection1 = [
     {
         id: 8,
         type: "likert",
-        question: "環境や社会のための取り組み（例：気候変動対策、公正な労働条件）は、どのくらい大切だと思いますか？<br><br>(1 = 全く大切だと思いません … 5 = とても大切だと思います)",
+        question: "環境や持続可能性のための取り組み（例：気候変動対策、資源の節約）は、どのくらい大切だと思いますか？<br><br>(1 = 全く大切だと思いません … 5 = とても大切だと思います)",
         options: ["1", "2", "3", "4", "5"]
     }
 ];
@@ -137,9 +137,11 @@ const japaneseQuestionsSection2 = [
         question: "次の文にどの程度同意しますか？<br><br>(1 = 全くそう思いません … 5 = とてもそう思います)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "独立して行動するよりも、グループの一員であるほうがよいと思います。",
-            "意思決定は集団で行うことが重要だと思います。",
-            "調和と合意を保つことが大切だと思います。"
+            "この製造元を信頼できると思います。",
+            "製造元は信頼できて、信頼性が高いと思います。",
+            "製造元は、環境や社会に対して責任ある行動を取っていると思います。",
+            "製造元は誠実に情報を伝えていると感じます。",
+            "広告メッセージは本物らしいと感じます。"
         ]
     },
     {
@@ -210,7 +212,7 @@ const germanQuestionsSection1 = [
     {
         id: 8,
         type: "likert",
-        question: "Wie wichtig finden Sie Maßnahmen für Umwelt und Gesellschaft (z. B. Klimaschutz, faire Arbeitsbedingungen)?<br><br>(1 = gar nicht wichtig … 5 = sehr wichtig)",
+        question: "Wie wichtig finden Sie Maßnahmen für Umwelt und Nachhaltigkeit (z. B. Klimaschutz, Ressourcenschonung)?<br><br>(1 = gar nicht wichtig … 5 = sehr wichtig)",
         options: ["1", "2", "3", "4", "5"]
     }
 ];
@@ -220,18 +222,20 @@ const germanQuestionsSection2 = [
     {
         id: 9,
         type: "likert-multiple",
-        question: "Inwieweit stimmen Sie den folgenden Aussagen zu?<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
+        question: "Bitte geben Sie an, inwieweit Sie den folgenden Aussagen zustimmen.<br><br>(1 = stimme überhaupt nicht zu … 5 = stimme voll zu)",
         options: ["1", "2", "3", "4", "5"],
         statements: [
-            "Ich bin lieber Teil einer Gruppe als unabhängig zu handeln.",
-            "Es ist mir wichtig, dass Entscheidungen gemeinschaftlich getroffen werden.",
-            "Ich finde es wichtig, Harmonie und Konsens zu bewahren."
+            "Ich vertraue dem Hersteller des Produkts.",
+            "Ich halte den Hersteller für glaubwürdig und zuverlässig.",
+            "Ich denke, dass der Hersteller verantwortungsvoll mit Umwelt und Gesellschaft umgeht.",
+            "Ich habe den Eindruck, dass der Hersteller ehrlich kommuniziert.",
+            "Die Werbebotschaft erscheint mir authentisch."
         ]
     },
     {
         id: 10,
         type: "radio",
-        question: "Manipulationscheck (Werbeinhalte erkennen)<br><br>Worauf lag der Schwerpunkt der angezeigten Werbung?",
+        question: "Worauf lag der Schwerpunkt der angezeigten Werbung?",
         options: ["Umwelt und Nachhaltigkeit", "Produktgenuss oder Geschmack", "Allgemeine Informationen ohne Schwerpunkt", "Anderes"]
     },
     {
@@ -381,6 +385,12 @@ class SurveyApp {
         const firstSection2Question = this.createQuestionElement(japaneseQuestionsSection2[0]);
         this.surveyContent.appendChild(firstSection2Question);
         
+        // Add new header for video questions
+        const videoHeader = document.createElement('div');
+        videoHeader.className = 'section-header';
+        videoHeader.innerHTML = '<h2>広告動画に関する質問</h2>';
+        this.surveyContent.appendChild(videoHeader);
+        
         // Add disclaimer and video after first question of Section 2
         const disclaimerContainer = document.createElement('div');
         disclaimerContainer.className = 'disclaimer-container';
@@ -436,6 +446,12 @@ class SurveyApp {
         // Add first question of Section 2
         const firstSection2Question = this.createQuestionElement(germanQuestionsSection2[0]);
         this.surveyContent.appendChild(firstSection2Question);
+        
+        // Add new header for video questions
+        const videoHeader = document.createElement('div');
+        videoHeader.className = 'section-header';
+        videoHeader.innerHTML = '<h2>Fragen zum Werbevideo</h2>';
+        this.surveyContent.appendChild(videoHeader);
         
         // Add disclaimer and video after first question of Section 2
         const disclaimerContainer = document.createElement('div');
