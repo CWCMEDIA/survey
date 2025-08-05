@@ -118,8 +118,8 @@ const japaneseQuestionsSection1 = [
     {
         id: 7,
         type: "radio",
-        question: "毎月の可処分所得（手取り）（任意回答）：",
-        options: ["250,000円未満", "250,000円～300,000円", "300,000円～350,000円", "350,000円～400,000円", "400,000円以上"]
+        question: "毎月の手取り収入（税引き後・1人あたり）：",
+        options: ["170,000円未満", "170,000円〜250,000円", "250,000円〜420,000円", "420,000円〜670,000円", "670,000円以上", "無回答"]
     },
     {
         id: 8,
@@ -204,8 +204,8 @@ const germanQuestionsSection1 = [
     {
         id: 7,
         type: "radio",
-        question: "Monatliches verfügbares Konsumeinkommen (netto) (freiwillig):",
-        options: ["Unter 2.500 €", "2.500 – 3.000 €", "3.000 – 3.500 €", "3.500 – 4.000 €", "Über 4.000 €"]
+        question: "Monatliches Nettoeinkommen (nach Steuern, pro Person):",
+        options: ["Unter 1.100 €", "1.100 – 1.600 €", "1.600 – 2.800 €", "2.800 – 4.400 €", "Über 4.400 €", "Keine Angabe"]
     },
     {
         id: 8,
