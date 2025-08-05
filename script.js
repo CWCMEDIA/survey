@@ -698,6 +698,12 @@ class SurveyApp {
         const btnText = submitBtn.querySelector('.btn-text');
         const btnLoader = submitBtn.querySelector('.btn-loader');
         
+        // Validate form before submission
+        if (!this.validateForm()) {
+            alert('Please answer all required questions before submitting.');
+            return;
+        }
+        
         // Show loading state
         submitBtn.disabled = true;
         btnText.style.display = 'none';
@@ -715,6 +721,44 @@ class SurveyApp {
             btnText.style.display = 'inline';
             btnLoader.style.display = 'none';
         }, 2000);
+    }
+    
+    validateForm() {
+        let isValid = true;
+        const questions = this.selectedLanguage === 'japanese' ? 
+            [...japaneseQuestionsSection1, ...japaneseQuestionsSection2] : 
+            this.selectedLanguage === 'german' ? 
+            [...germanQuestionsSection1, ...germanQuestionsSection2] : 
+            universalQuestions;
+        
+        questions.forEach(question => {
+            const questionName = `question_${question.id}`;
+            
+            if (question.type === 'radio' || question.type === 'likert') {
+                const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                if (!checkedRadio) {
+                    console.log(`Missing answer for question ${question.id}`);
+                    isValid = false;
+                }
+            } else if (question.type === 'likert-multiple') {
+                question.statements.forEach((statement, statementIndex) => {
+                    const statementName = `question_${question.id}_statement_${statementIndex}`;
+                    const checkedRadio = document.querySelector(`input[name="${statementName}"]:checked`);
+                    if (!checkedRadio) {
+                        console.log(`Missing answer for question ${question.id} statement ${statementIndex + 1}`);
+                        isValid = false;
+                    }
+                });
+            } else if (question.type === 'text' || question.type === 'textarea') {
+                const element = document.querySelector(`[name="${questionName}"]`);
+                if (!element || !element.value.trim()) {
+                    console.log(`Missing text answer for question ${question.id}`);
+                    isValid = false;
+                }
+            }
+        });
+        
+        return isValid;
     }
 
     collectFormData() {
@@ -738,6 +782,11 @@ class SurveyApp {
                 if (question.type === 'checkbox') {
                     const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
                     formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else if (question.type === 'radio' || question.type === 'likert') {
+                    // For radio buttons, find the checked one
+                    const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = checkedRadio ? checkedRadio.value : '';
+                    console.log(`Japanese Q${question.id}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                 } else {
                     const element = document.querySelector(`[name="${questionName}"]`);
                     if (element) {
@@ -756,10 +805,16 @@ class SurveyApp {
                     const statementResponses = [];
                     question.statements.forEach((statement, statementIndex) => {
                         const questionName = `question_${question.id}_statement_${statementIndex}`;
-                        const element = document.querySelector(`[name="${questionName}"]:checked`);
-                        statementResponses.push(element ? element.value : '');
+                        const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                        statementResponses.push(checkedRadio ? checkedRadio.value : '');
+                        console.log(`Japanese Q${question.id} Statement ${statementIndex + 1}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                     });
                     formData.responses[question.id] = statementResponses;
+                } else if (question.type === 'radio') {
+                    const questionName = `question_${question.id}`;
+                    const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = checkedRadio ? checkedRadio.value : '';
+                    console.log(`Japanese Q${question.id}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                 } else {
                     const questionName = `question_${question.id}`;
                     
@@ -775,6 +830,7 @@ class SurveyApp {
                 }
             });
         } else if (this.selectedLanguage === 'german') {
+            console.log('Collecting German responses...');
             // Collect German Section 1 responses
             germanQuestionsSection1.forEach(question => {
                 const questionName = `question_${question.id}`;
@@ -782,6 +838,11 @@ class SurveyApp {
                 if (question.type === 'checkbox') {
                     const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
                     formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else if (question.type === 'radio' || question.type === 'likert') {
+                    // For radio buttons, find the checked one
+                    const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = checkedRadio ? checkedRadio.value : '';
+                    console.log(`German Q${question.id}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                 } else {
                     const element = document.querySelector(`[name="${questionName}"]`);
                     if (element) {
@@ -800,10 +861,16 @@ class SurveyApp {
                     const statementResponses = [];
                     question.statements.forEach((statement, statementIndex) => {
                         const questionName = `question_${question.id}_statement_${statementIndex}`;
-                        const element = document.querySelector(`[name="${questionName}"]:checked`);
-                        statementResponses.push(element ? element.value : '');
+                        const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                        statementResponses.push(checkedRadio ? checkedRadio.value : '');
+                        console.log(`German Q${question.id} Statement ${statementIndex + 1}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                     });
                     formData.responses[question.id] = statementResponses;
+                } else if (question.type === 'radio') {
+                    const questionName = `question_${question.id}`;
+                    const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = checkedRadio ? checkedRadio.value : '';
+                    console.log(`German Q${question.id}: ${checkedRadio ? checkedRadio.value : 'Not answered'}`);
                 } else {
                     const questionName = `question_${question.id}`;
                     
@@ -826,6 +893,9 @@ class SurveyApp {
                 if (question.type === 'checkbox') {
                     const checkboxes = document.querySelectorAll(`input[name="${questionName}"]:checked`);
                     formData.responses[question.id] = Array.from(checkboxes).map(cb => cb.value);
+                } else if (question.type === 'radio' || question.type === 'rating') {
+                    const checkedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
+                    formData.responses[question.id] = checkedRadio ? checkedRadio.value : '';
                 } else {
                     const element = document.querySelector(`[name="${questionName}"]`);
                     if (element) {
@@ -835,6 +905,7 @@ class SurveyApp {
             });
         }
         
+        console.log('Final form data:', formData);
         return formData;
     }
 
@@ -888,15 +959,49 @@ class SurveyApp {
         const surveyDataInput = document.getElementById('surveyDataInput');
         
         if (hiddenForm && surveyDataInput) {
-            surveyDataInput.value = JSON.stringify(formData);
-            console.log('Submitting to Formspree:', formData);
+            // Format the data for better readability in Formspree
+            const formattedData = {
+                survey_id: formData.surveyId,
+                survey_title: formData.surveyTitle,
+                language: formData.language,
+                video_url: formData.videoUrl,
+                timestamp: formData.timestamp,
+                responses: formData.responses
+            };
+            
+            surveyDataInput.value = JSON.stringify(formattedData, null, 2);
+            console.log('Submitting to Formspree:', formattedData);
+            
+            // Submit the form
             hiddenForm.submit();
+            
+            // Also try to send via fetch as backup
+            this.sendViaFetch(formattedData);
         } else {
             console.error('Hidden form elements not found');
         }
-        
-        // Method 2: Email the data (if you want)
-        this.emailSurveyData(formData);
+    }
+    
+    async sendViaFetch(formData) {
+        try {
+            const response = await fetch('https://formspree.io/f/mjkoavgy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    survey_data: JSON.stringify(formData, null, 2)
+                })
+            });
+            
+            if (response.ok) {
+                console.log('✅ Data sent to Formspree via fetch successfully');
+            } else {
+                console.log('⚠️ Formspree fetch failed, but form submission should work');
+            }
+        } catch (error) {
+            console.log('⚠️ Fetch failed, but form submission should work:', error);
+        }
     }
     
     emailSurveyData(formData) {
