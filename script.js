@@ -418,6 +418,11 @@ class SurveyApp {
             const questionElement = this.createQuestionElement(japaneseQuestionsSection2[i]);
             this.surveyContent.appendChild(questionElement);
         }
+        
+        // Test the questions after they're rendered
+        setTimeout(() => {
+            this.testJapaneseQuestions();
+        }, 100);
     }
 
     renderGermanSurvey() {
@@ -536,9 +541,20 @@ class SurveyApp {
             input.id = `q${question.id}_opt${index}`;
             input.value = option;
             
+            // Add event listener for debugging
+            input.addEventListener('change', (e) => {
+                console.log(`Radio clicked: Question ${question.id}, Option: ${option}, Value: ${e.target.value}`);
+            });
+            
             const label = document.createElement('label');
             label.htmlFor = `q${question.id}_opt${index}`;
             label.textContent = option;
+            
+            // Also make the label clickable
+            label.addEventListener('click', () => {
+                input.checked = true;
+                console.log(`Label clicked: Question ${question.id}, Option: ${option}`);
+            });
             
             optionItem.appendChild(input);
             optionItem.appendChild(label);
@@ -614,9 +630,20 @@ class SurveyApp {
             input.id = `q${question.id}_likert${index}`;
             input.value = option;
             
+            // Add event listener for debugging
+            input.addEventListener('change', (e) => {
+                console.log(`Likert clicked: Question ${question.id}, Option: ${option}, Value: ${e.target.value}`);
+            });
+            
             const label = document.createElement('label');
             label.htmlFor = `q${question.id}_likert${index}`;
             label.textContent = option;
+            
+            // Make the entire likert option clickable
+            likertOption.addEventListener('click', () => {
+                input.checked = true;
+                console.log(`Likert option clicked: Question ${question.id}, Option: ${option}`);
+            });
             
             likertOption.appendChild(input);
             likertOption.appendChild(label);
@@ -653,9 +680,20 @@ class SurveyApp {
                 input.id = `q${question.id}_s${statementIndex}_o${optionIndex}`;
                 input.value = option;
                 
+                // Add event listener for debugging
+                input.addEventListener('change', (e) => {
+                    console.log(`Likert-multiple clicked: Question ${question.id}, Statement ${statementIndex + 1}, Option: ${option}, Value: ${e.target.value}`);
+                });
+                
                 const label = document.createElement('label');
                 label.htmlFor = `q${question.id}_s${statementIndex}_o${optionIndex}`;
                 label.textContent = option;
+                
+                // Make the entire likert option clickable
+                likertOption.addEventListener('click', () => {
+                    input.checked = true;
+                    console.log(`Likert-multiple option clicked: Question ${question.id}, Statement ${statementIndex + 1}, Option: ${option}`);
+                });
                 
                 likertOption.appendChild(input);
                 likertOption.appendChild(label);
@@ -1052,6 +1090,44 @@ class SurveyApp {
         localStorage.setItem('surveySubmissions', JSON.stringify(existingSubmissions));
         
         console.log(`💾 Total submissions stored: ${existingSubmissions.length}`);
+    }
+
+    // Test function to verify all questions are working
+    testJapaneseQuestions() {
+        console.log('🧪 Testing Japanese Questions...');
+        
+        // Test Section 1 questions
+        japaneseQuestionsSection1.forEach(question => {
+            console.log(`Testing Question ${question.id}: ${question.question}`);
+            console.log(`Options: ${question.options.join(', ')}`);
+            
+            // Check if elements exist
+            const questionName = `question_${question.id}`;
+            const elements = document.querySelectorAll(`[name="${questionName}"]`);
+            console.log(`Found ${elements.length} elements for question ${question.id}`);
+            
+            if (question.type === 'radio' || question.type === 'likert') {
+                const checkedElement = document.querySelector(`input[name="${questionName}"]:checked`);
+                console.log(`Selected value: ${checkedElement ? checkedElement.value : 'None selected'}`);
+            }
+        });
+        
+        // Test Section 2 questions
+        japaneseQuestionsSection2.forEach(question => {
+            console.log(`Testing Question ${question.id}: ${question.question}`);
+            
+            if (question.type === 'likert-multiple') {
+                question.statements.forEach((statement, statementIndex) => {
+                    const questionName = `question_${question.id}_statement_${statementIndex}`;
+                    const checkedElement = document.querySelector(`input[name="${questionName}"]:checked`);
+                    console.log(`Statement ${statementIndex + 1}: ${checkedElement ? checkedElement.value : 'None selected'}`);
+                });
+            } else {
+                const questionName = `question_${question.id}`;
+                const checkedElement = document.querySelector(`input[name="${questionName}"]:checked`);
+                console.log(`Selected value: ${checkedElement ? checkedElement.value : 'None selected'}`);
+            }
+        });
     }
 }
 
