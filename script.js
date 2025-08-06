@@ -949,41 +949,54 @@ class SurveyApp {
 
     async processSubmission(formData) {
         try {
-            // Send data to Formspree
-            const response = await this.sendToFormspree(formData);
+            // Send data to Formspark
+            const response = await this.sendToFormspark(formData);
             
             if (response.success) {
-                console.log('✅ Data sent to Formspree successfully');
+                console.log('✅ Data sent to Formspark successfully');
                 this.showSuccessMessage();
             } else {
-                console.error('❌ Failed to send to Formspree:', response.error);
-                this.showErrorMessage(`Failed to submit to Formspree: ${response.error}. Please try again.`);
+                console.error('❌ Failed to send to Formspark:', response.error);
+                this.showErrorMessage(`Failed to submit to Formspark: ${response.error}. Please try again.`);
             }
             
         } catch (error) {
-            console.error('❌ Error sending to Formspree:', error);
+            console.error('❌ Error sending to Formspark:', error);
             this.showErrorMessage(`Network error: ${error.message}. Please check your internet connection and try again.`);
         }
     }
 
-    async sendToFormspree(formData) {
+    async sendToFormspark(formData) {
         try {
-            console.log('📤 Sending data to Formspree:', formData);
+            console.log('📤 Sending data to Formspark:', formData);
             
-            // Send to Formspree
-            const response = await fetch('https://formspree.io/f/mjkoavgy', {
+            // Format data for Formspark
+            const formsparkData = {
+                formId: 'blQ5Sc5jt',
+                data: {
+                    surveyId: formData.surveyId,
+                    surveyTitle: formData.surveyTitle,
+                    language: formData.language,
+                    videoUrl: formData.videoUrl || '',
+                    timestamp: formData.timestamp,
+                    responses: JSON.stringify(formData.responses)
+                }
+            };
+            
+            // Send to Formspark
+            const response = await fetch('https://submit-form.com/blQ5Sc5jt', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formsparkData.data)
             });
             
             console.log('📥 Response status:', response.status);
             
             if (response.ok) {
-                console.log('✅ Data sent to Formspree successfully');
-                return { success: true, message: "Data sent to Formspree successfully" };
+                console.log('✅ Data sent to Formspark successfully');
+                return { success: true, message: "Data sent to Formspark successfully" };
             } else {
                 const errorText = await response.text();
                 console.error('❌ HTTP error:', response.status);
