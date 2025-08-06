@@ -17,6 +17,7 @@
     <h1>🔧 Formspark Connection Test</h1>
     
     <button class="test-btn" onclick="testFormspark()">Test Formspark Connection</button>
+    <button class="test-btn" onclick="testFormsparkSimple()">Test Simple Format</button>
     
     <div id="results"></div>
 
@@ -84,7 +85,64 @@
                         <div class="result error">
                             ❌ Formspark Connection Failed<br>
                             <strong>Status:</strong> ${response.status}<br>
-                            <strong>Error:</strong> ${errorText}
+                            <strong>Error:</strong> ${errorText}<br>
+                            <strong>Sent Data:</strong><br>
+                            <pre>${JSON.stringify(formsparkData, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Network Error<br>
+                        <strong>Error:</strong> ${error.message}<br>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testFormsparkSimple() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="result">🔄 Testing simple Formspark format...</div>';
+            
+            try {
+                // Simple format - just basic fields
+                const simpleData = {
+                    surveyId: "1",
+                    language: "german",
+                    message: "Test submission from survey"
+                };
+                
+                const response = await fetch('https://submit-form.com/blQ5Sc5jt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(simpleData)
+                });
+                
+                console.log('📥 Response status:', response.status);
+                
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Simple Formspark Test Successful!<br>
+                            <strong>Status:</strong> ${response.status}<br>
+                            <strong>Message:</strong> Simple data sent successfully<br>
+                            <strong>Test Data:</strong><br>
+                            <pre>${JSON.stringify(simpleData, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    const errorText = await response.text();
+                    resultsDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ Simple Formspark Test Failed<br>
+                            <strong>Status:</strong> ${response.status}<br>
+                            <strong>Error:</strong> ${errorText}<br>
+                            <strong>Sent Data:</strong><br>
+                            <pre>${JSON.stringify(simpleData, null, 2)}</pre>
                         </div>
                     `;
                 }

@@ -970,17 +970,25 @@ class SurveyApp {
         try {
             console.log('📤 Sending data to Formspark:', formData);
             
-            // Format data for Formspark
+            // Format data for Formspark - using simpler format
             const formsparkData = {
-                formId: 'blQ5Sc5jt',
-                data: {
-                    surveyId: formData.surveyId,
-                    surveyTitle: formData.surveyTitle,
-                    language: formData.language,
-                    videoUrl: formData.videoUrl || '',
-                    timestamp: formData.timestamp,
-                    responses: JSON.stringify(formData.responses)
-                }
+                surveyId: formData.surveyId.toString(),
+                surveyTitle: formData.surveyTitle,
+                language: formData.language,
+                videoUrl: formData.videoUrl || '',
+                timestamp: formData.timestamp,
+                // Flatten responses for better compatibility
+                age: formData.responses[1] || '',
+                gender: formData.responses[2] || '',
+                country: formData.responses[3] || '',
+                culture: formData.responses[4] || '',
+                education: formData.responses[5] || '',
+                employment: formData.responses[6] || '',
+                income: formData.responses[7] || '',
+                environmental: formData.responses[8] || '',
+                culturalOrientation: Array.isArray(formData.responses[9]) ? formData.responses[9].join(', ') : formData.responses[9] || '',
+                manipulationCheck: formData.responses[10] || '',
+                manufacturerEvaluation: Array.isArray(formData.responses[11]) ? formData.responses[11].join(', ') : formData.responses[11] || ''
             };
             
             // Send to Formspark
@@ -989,7 +997,7 @@ class SurveyApp {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formsparkData.data)
+                body: JSON.stringify(formsparkData)
             });
             
             console.log('📥 Response status:', response.status);
