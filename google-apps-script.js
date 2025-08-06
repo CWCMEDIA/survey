@@ -8,6 +8,11 @@ function doPost(e) {
     
     console.log('Received data:', data);
 
+    // Handle test requests
+    if (data.test) {
+      return testConnection();
+    }
+
     // Directly open the specific spreadsheet by URL
     const spreadsheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11nZZc3-0taBL0hxGX0XjmCw4U3bYi_w7JMxNWMpO8hY/edit");
     const sheet = spreadsheet.getSheetByName("Survey Answers");

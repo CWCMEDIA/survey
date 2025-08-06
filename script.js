@@ -949,38 +949,29 @@ class SurveyApp {
 
     async processSubmission(formData) {
         try {
-            // Send data to Google Sheets
-            const response = await this.sendToGoogleSheets(formData);
+            // Send data to Formspree
+            const response = await this.sendToFormspree(formData);
             
             if (response.success) {
-                console.log('✅ Data sent to Google Sheets successfully');
+                console.log('✅ Data sent to Formspree successfully');
                 this.showSuccessMessage();
             } else {
-                console.error('❌ Failed to send to Google Sheets:', response.error);
-                this.showErrorMessage('Failed to submit. Please try again.');
+                console.error('❌ Failed to send to Formspree:', response.error);
+                this.showErrorMessage(`Failed to submit to Formspree: ${response.error}. Please try again.`);
             }
             
         } catch (error) {
-            console.error('❌ Error sending to Google Sheets:', error);
-            
-            // Store in localStorage as backup and show success message
-            this.storeSubmission(formData);
-            this.showSuccessMessage();
-            
-            // Log the error for debugging
-            console.log('Data stored locally as backup due to network error');
+            console.error('❌ Error sending to Formspree:', error);
+            this.showErrorMessage(`Network error: ${error.message}. Please check your internet connection and try again.`);
         }
     }
 
-    async sendToGoogleSheets(formData) {
+    async sendToFormspree(formData) {
         try {
-            // Store the data locally as backup
-            this.storeSubmission(formData);
+            console.log('📤 Sending data to Formspree:', formData);
             
-            console.log('📤 Sending data to Google Sheets:', formData);
-            
-            // Send to Google Sheets via Apps Script
-            const response = await fetch('https://script.google.com/macros/s/AKfycbwVVAixDO1RXnLUZFO1cBhb8_fRVdU48dG_r39uFRDrZOSgqFktgODXjAQPjKwcaIDr/exec', {
+            // Send to Formspree
+            const response = await fetch('https://formspree.io/f/mjkoavgy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -991,18 +982,8 @@ class SurveyApp {
             console.log('📥 Response status:', response.status);
             
             if (response.ok) {
-                const result = await response.json();
-                console.log('📥 Response data:', result);
-                
-                if (result.success) {
-                    console.log('✅ Data sent to Google Sheets successfully');
-                    console.log('📊 Row count:', result.rowCount);
-                    return { success: true, message: "Data sent to Google Sheets successfully" };
-                } else {
-                    console.error('❌ Google Sheets error:', result.error);
-                    console.error('❌ Error stack:', result.stack);
-                    return { success: false, error: result.error };
-                }
+                console.log('✅ Data sent to Formspree successfully');
+                return { success: true, message: "Data sent to Formspree successfully" };
             } else {
                 const errorText = await response.text();
                 console.error('❌ HTTP error:', response.status);
@@ -1012,8 +993,7 @@ class SurveyApp {
             
         } catch (error) {
             console.error('❌ Network error:', error);
-            // Return success anyway since we stored locally
-            return { success: true, message: "Data stored locally due to network error" };
+            return { success: false, error: error.message };
         }
     }
     
