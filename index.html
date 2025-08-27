@@ -8,11 +8,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal-overlay disclaimer-modal">
+        <div class="modal-content disclaimer-content">
+            <div class="modal-header">
+                <h2>Survey Ended / Umfrage beendet / アンケート終了</h2>
+            </div>
+            <div class="disclaimer-text">
+                <div class="german-text">
+                    <h3>Hinweis:</h3>
+                    <p>Die Umfrage wurde am 27.08.2025 beendet. Vielen Dank für Ihre Teilnahme!</p>
+                    <p>Die Fragen sind weiterhin zu Dokumentationszwecken einsehbar, eine Beantwortung ist jedoch nicht mehr möglich.</p>
+                </div>
+                <div class="japanese-text">
+                    <h3>注意:</h3>
+                    <p>このアンケートは2025年8月27日に終了しました。ご協力ありがとうございました。</p>
+                    <p>内容は記録のために引き続き閲覧できますが、回答の送信はできません。</p>
+                </div>
+            </div>
+            <div class="disclaimer-actions">
+                <button id="continueToSurvey" class="continue-btn">
+                    <span class="btn-text">Continue to Survey / Zur Umfrage / アンケートに進む</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Language Selection Modal -->
     <div id="languageModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🌍 Select Your Language</h2>
+                <h2>Select Your Language</h2>
                 <p>Bitte wählen Sie Ihre Sprache / 言語を選択してください</p>
             </div>
             <div class="language-options">
@@ -42,7 +68,7 @@
                 
                 <div class="form-actions">
                     <button type="submit" class="submit-btn">
-                        <span class="btn-text">Submit Survey</span>
+                        <span class="btn-text">Survey Ended - View Only</span>
                         <div class="btn-loader" style="display: none;">
                             <div class="spinner"></div>
                         </div>

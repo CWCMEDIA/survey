@@ -258,19 +258,39 @@ class SurveyApp {
         this.form = document.getElementById('surveyForm');
         this.surveyContent = document.getElementById('surveyContent');
         this.languageModal = document.getElementById('languageModal');
+        this.disclaimerModal = document.getElementById('disclaimerModal');
         
         this.init();
     }
 
     init() {
-        // Show language selection modal first
+        // Show disclaimer modal first
+        this.showDisclaimerModal();
+    }
+
+    showDisclaimerModal() {
+        // Hide the main survey content initially
+        document.querySelector('.container').style.display = 'none';
+        
+        // Show the disclaimer modal
+        this.disclaimerModal.style.display = 'flex';
+        
+        // Add event listener to continue button
+        const continueButton = document.getElementById('continueToSurvey');
+        continueButton.addEventListener('click', () => {
+            this.hideDisclaimerModal();
+        });
+    }
+
+    hideDisclaimerModal() {
+        // Hide the disclaimer modal
+        this.disclaimerModal.style.display = 'none';
+        
+        // Show language selection modal
         this.showLanguageModal();
     }
 
     showLanguageModal() {
-        // Hide the main survey content initially
-        document.querySelector('.container').style.display = 'none';
-        
         // Show the language modal
         this.languageModal.style.display = 'flex';
         
@@ -342,6 +362,20 @@ class SurveyApp {
 
     renderSurvey() {
         this.surveyContent.innerHTML = '';
+        
+        // Add view-only banner
+        const viewOnlyBanner = document.createElement('div');
+        viewOnlyBanner.className = 'view-only-banner';
+        viewOnlyBanner.innerHTML = `
+            <div class="banner-content">
+                <span class="banner-icon">!</span>
+                <span class="banner-text">
+                    <strong>View Only Mode:</strong> This survey ended on August 27, 2025. 
+                    Questions are visible for documentation purposes only.
+                </span>
+            </div>
+        `;
+        this.surveyContent.appendChild(viewOnlyBanner);
         
         if (this.selectedLanguage === 'japanese') {
             // Render Japanese survey with sections
@@ -419,10 +453,7 @@ class SurveyApp {
             this.surveyContent.appendChild(questionElement);
         }
         
-        // Test the questions after they're rendered
-        setTimeout(() => {
-            this.testJapaneseQuestions();
-        }, 100);
+        
     }
 
     renderGermanSurvey() {
@@ -725,10 +756,39 @@ class SurveyApp {
     }
 
     setupEventListeners() {
+        // Disable form submission since survey has ended
         this.form.addEventListener('submit', (e) => {
             e.preventDefault();
-            this.handleSubmit();
+            this.showSurveyEndedMessage();
         });
+        
+        // Disable all form inputs to prevent interaction
+        this.disableFormInputs();
+    }
+
+    disableFormInputs() {
+        // Disable all form inputs to prevent interaction
+        const inputs = this.form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.disabled = true;
+            input.style.opacity = '0.6';
+            input.style.cursor = 'not-allowed';
+        });
+        
+        // Disable submit button
+        const submitBtn = this.form.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        submitBtn.style.cursor = 'not-allowed';
+        
+        // Update submit button text
+        const btnText = submitBtn.querySelector('.btn-text');
+        btnText.textContent = 'Survey Ended - View Only';
+    }
+
+    showSurveyEndedMessage() {
+        // Show a message that the survey has ended
+        alert('This survey has ended on August 27, 2025. You can view the questions for documentation purposes, but submissions are no longer accepted.');
     }
 
     handleSubmit() {
@@ -1126,9 +1186,4 @@ document.addEventListener('DOMContentLoaded', () => {
     new SurveyApp();
 });
 
-// Add some fun console messages
-console.log('🎯 Survey App Loaded!');
-console.log('🌍 Language selection enabled');
-console.log('📊 Random survey selection active');
-console.log('🎥 Random YouTube videos enabled');
-console.log('💾 Responses stored in localStorage'); 
+ 

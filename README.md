@@ -1,192 +1,155 @@
-# 🎯 Random Survey System
+# 🚀 Survey Automation System - Vercel Deployment
 
-A modern, responsive survey application that randomly selects from 3 different surveys each time it's accessed. Perfect for research studies where you want to randomize survey content.
+This project automatically distributes 161 survey responses over 2 weeks using Vercel serverless functions and cron jobs.
 
-## ✨ Features
-
-- **🎲 Random Survey Selection**: Each time someone visits the link, they get a randomly selected survey
-- **🎥 YouTube Video Integration**: Different videos for each survey version
-- **🌍 Language Selection**: German and Japanese language options
-- **📱 Modern & Responsive Design**: Beautiful, custom CSS with glassmorphism effects
-- **🔄 Multiple Question Types**: Radio buttons, checkboxes, ratings, text inputs, and textareas
-- **💾 Google Sheets Integration**: Automatic data collection and storage
-- **⚡ Smooth Animations**: Hover effects, loading states, and smooth transitions
-
-## 🎨 Design Features
-
-- **Glassmorphism UI**: Modern frosted glass effect with backdrop blur
-- **Gradient Backgrounds**: Beautiful purple-blue gradient theme
-- **Custom Animations**: Slide-up entrance, hover effects, and loading spinners
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
-- **Modern Typography**: Inter font family for clean, readable text
-
-## 📊 Survey Structure
-
-### 3 Survey Versions (Same Questions, Different Videos)
-- **Survey 1**: Video 1 + Universal Questions
-- **Survey 2**: Video 2 + Universal Questions  
-- **Survey 3**: Video 3 + Universal Questions
-
-### Universal Question Set
-1. **Social Media Platform** (Radio buttons)
-2. **Tech-Savviness Rating** (1-5 scale)
-3. **Devices Owned** (Checkboxes)
-4. **Most Annoying Tech Thing** (Text input)
-5. **Ideal Smartphone Description** (Textarea)
-
-## 🚀 Live Demo
-
-**🌐 Survey URL**: [https://yourusername.github.io/survey](https://yourusername.github.io/survey)
-
-## 🛠️ Local Development
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/survey.git
-   cd survey
-   ```
-
-2. **Open in browser:**
-   ```bash
-   open index.html
-   ```
-   Or simply double-click `index.html` in your file explorer.
-
-## 🌐 GitHub Pages Deployment
-
-### Automatic Deployment (Recommended)
-
-1. **Push to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Initial survey deployment"
-   git push origin main
-   ```
-
-2. **Enable GitHub Pages:**
-   - Go to your repository on GitHub
-   - Click "Settings" → "Pages"
-   - Under "Source", select "Deploy from a branch"
-   - Choose "main" branch and "/ (root)" folder
-   - Click "Save"
-
-3. **Your survey will be live at:**
-   ```
-   https://yourusername.github.io/survey
-   ```
-
-### Manual Deployment
-
-If you prefer manual deployment:
-
-1. **Create a new repository** on GitHub named `survey`
-2. **Upload all files** to the repository
-3. **Enable GitHub Pages** in repository settings
-4. **Access your survey** at the provided URL
-
-## 📊 Google Sheets Integration
-
-The survey automatically sends data to Google Sheets. See `GOOGLE_SHEETS_SETUP.md` for setup instructions.
-
-### Data Structure in Google Sheets:
-```
-Timestamp | Survey ID | Survey Title | Language | Q1 | Q2 | Q3 | Q4 | Q5
-2024-01-15 | 1 | Research Survey - Version 1 | german | Instagram | 4 | Smartphone, Laptop | Slow internet | Fast and reliable...
-```
-
-## 🎯 Perfect for Research
-
-This system is ideal for:
-- **A/B Testing**: Compare different video impacts on responses
-- **Randomized Studies**: Eliminate bias through randomization
-- **User Experience Research**: Gather diverse feedback
-- **Academic Studies**: Conduct controlled experiments
-- **Market Research**: Test different video content effectiveness
-
-## 📱 Mobile Experience
-
-The survey is fully responsive and optimized for mobile devices:
-- Touch-friendly buttons and inputs
-- Optimized spacing for small screens
-- Smooth scrolling and interactions
-- Proper viewport handling
-
-## 🔧 Customization
-
-### Changing Videos
-Edit the `surveys` array in `script.js`:
-```javascript
-const surveys = [
-    {
-        id: 1,
-        title: "Research Survey - Version 1",
-        videoUrl: "YOUR_VIDEO_URL_1",
-        videoId: "YOUR_VIDEO_ID_1"
-    },
-    // ... more surveys
-];
-```
-
-### Adding Questions
-Edit the `universalQuestions` array in `script.js`:
-```javascript
-const universalQuestions = [
-    {
-        id: 1,
-        type: "radio",
-        question: "Your question here?",
-        options: ["Option 1", "Option 2", "Option 3"]
-    },
-    // ... more questions
-];
-```
-
-### Styling
-All styling is in `styles.css` with CSS custom properties for easy theming.
-
-## 🐛 Troubleshooting
-
-### GitHub Pages Issues
-- **404 Error**: Make sure `index.html` is in the root directory
-- **CORS Errors**: Normal for local testing, upload to GitHub Pages
-- **Script Not Loading**: Check file paths and case sensitivity
-
-### Google Sheets Issues
-- **Data Not Appearing**: Check the setup guide in `GOOGLE_SHEETS_SETUP.md`
-- **Authorization Errors**: Re-deploy and re-authorize the Apps Script
-
-## 📄 File Structure
+## 📁 Project Structure
 
 ```
-survey/
-├── index.html              # Main HTML file
-├── styles.css              # Custom CSS styling
-├── script.js               # JavaScript functionality
-├── google-apps-script.js   # Google Apps Script code
-├── GOOGLE_SHEETS_SETUP.md  # Setup instructions
-├── README.md               # This file
-└── .gitignore              # Git ignore rules
+survey-vercel/
+├── public/                 # Static files served by Vercel
+│   ├── index.html         # Main survey site
+│   ├── styles.css         # Survey styles
+│   ├── script.js          # Survey functionality
+│   └── Umfrage_Daten_Levitea.csv  # Survey data
+├── api/                   # Vercel serverless functions
+│   └── cron-submit.js     # Automated submission function
+├── vercel.json            # Vercel configuration
+├── package.json           # Dependencies
+└── README.md              # This file
 ```
 
-## 🔮 Future Enhancements
+## 🌍 Features
 
-- **Backend Integration**: Connect to a real database
-- **Analytics Dashboard**: View survey results and statistics
-- **More Question Types**: Sliders, image selection, etc.
-- **Survey Templates**: Pre-built survey templates
-- **Export Features**: Export responses to CSV/Excel
-- **User Authentication**: Track individual users
+- **Automatic Distribution**: 161 responses spread over 2 weeks
+- **Timezone Awareness**: German (10am-10pm) and Japanese (10am-10pm) business hours
+- **Video Mapping**: Correct video versions for each country
+- **Formspark Integration**: Automatic submissions to your endpoint
+- **Cron Jobs**: Runs every 6 hours automatically
+
+## 🚀 Deployment Steps
+
+### 1. Install Vercel CLI
+```bash
+npm install -g vercel
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Deploy to Vercel
+```bash
+vercel
+```
+
+### 4. Set Up Cron Jobs
+The cron job is configured in `vercel.json` to run every 6 hours:
+```json
+"crons": [
+  {
+    "path": "/api/cron-submit",
+    "schedule": "0 */6 * * *"
+  }
+]
+```
+
+## ⏰ How It Works
+
+### Cron Job Schedule
+- **Runs every 6 hours** (00:00, 06:00, 12:00, 18:00 UTC)
+- **Processes ~3-4 responses** per run
+- **Respects business hours** for each country
+
+### Business Hours
+- **Germany**: 10:00 AM - 10:00 PM (UTC+1)
+- **Japan**: 10:00 AM - 10:00 PM (UTC+9)
+
+### Response Distribution
+- **Day 1**: 12 responses
+- **Day 2**: 8 responses
+- **Day 3**: 15 responses
+- **...and so on for 14 days**
+- **Total**: Exactly 161 responses
+
+## 📊 Monitoring
+
+### Vercel Dashboard
+- View function logs at [vercel.com/dashboard](https://vercel.com/dashboard)
+- Monitor cron job execution
+- Check function performance
+
+### Manual Testing
+Test the cron function manually:
+```
+https://your-project.vercel.app/api/cron-submit
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+Set these in your Vercel dashboard:
+- `FORMSPARK_ENDPOINT`: Your Formspark submission URL
+- `LOG_LEVEL`: Logging level (debug, info, warn, error)
+
+### Cron Job Timing
+Modify `vercel.json` to change frequency:
+- `0 */6 * * *` = Every 6 hours
+- `0 */4 * * *` = Every 4 hours
+- `0 */2 * * *` = Every 2 hours
+
+## 📝 CSV Data Format
+
+The system expects CSV data with these columns:
+- `Alter` - Age
+- `Geschlecht` - Gender
+- `Wohnsitzland` - Country
+- `Stimulus-Video` - Video version
+- And other survey response fields
+
+## 🚨 Important Notes
+
+### Before Deployment
+1. **Test locally** with `vercel dev`
+2. **Verify CSV data** format
+3. **Check Formspark endpoint** is correct
+4. **Review business hours** logic
+
+### After Deployment
+1. **Monitor first few runs** for errors
+2. **Check Formspark dashboard** for submissions
+3. **Verify timezone handling** is correct
+4. **Review logs** for any issues
+
+## 🆘 Troubleshooting
+
+### Common Issues
+1. **Cron not running**: Check Vercel dashboard for errors
+2. **Formspark errors**: Verify endpoint URL and format
+3. **Timezone issues**: Check UTC offset calculations
+4. **CSV parsing errors**: Verify file format and encoding
+
+### Debug Mode
+Enable debug logging by setting `LOG_LEVEL=debug` in Vercel environment variables.
 
 ## 📞 Support
 
-If you encounter any issues:
-1. Check the troubleshooting section above
-2. Review the Google Sheets setup guide
-3. Check browser console for error messages
-4. Ensure all files are properly uploaded to GitHub
+If you encounter issues:
+1. Check Vercel function logs
+2. Verify CSV data format
+3. Test Formspark endpoint manually
+4. Review business hours logic
+
+## 🎯 Success Criteria
+
+The system is working correctly when:
+- ✅ Responses are submitted every 6 hours
+- ✅ German responses only during German business hours
+- ✅ Japanese responses only during Japanese business hours
+- ✅ All 161 responses are submitted within 2 weeks
+- ✅ Video versions match correctly for each country
+- ✅ Data format matches your existing Formspark submissions
 
 ---
 
-**Built with ❤️ for research and learning**
-
-**Live Demo**: [https://yourusername.github.io/survey](https://yourusername.github.io/survey) 
+**Deploy and let it run automatically for 2 weeks!** 🚀 
