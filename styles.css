@@ -40,6 +40,9 @@ body {
 .disclaimer-content {
     max-width: 700px;
     text-align: left;
+    max-height: 90vh; /* Limit height to viewport */
+    overflow-y: auto; /* Enable scrolling */
+    padding: 20px; /* Reduce padding on mobile */
 }
 
 .disclaimer-text {
@@ -67,6 +70,7 @@ body {
 .disclaimer-actions {
     text-align: center;
     margin-top: 32px;
+    padding-bottom: 10px; /* Add bottom padding for mobile */
 }
 
 .continue-btn {
@@ -80,6 +84,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    min-width: 200px; /* Ensure button is wide enough on mobile */
 }
 
 .continue-btn:hover {
@@ -176,6 +181,8 @@ body {
     width: 90%;
     text-align: center;
     animation: slideUp 0.4s ease-out;
+    max-height: 90vh; /* Ensure modal doesn't exceed viewport height */
+    overflow-y: auto; /* Enable scrolling if needed */
 }
 
 .modal-header h2 {
@@ -583,12 +590,22 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .modal-content {
-        padding: 30px 24px;
+        padding: 24px;
         margin: 20px;
+        max-width: 95vw;
+        width: calc(100vw - 40px);
+        max-height: 85vh;
+        border-radius: 16px;
     }
     
     .modal-header h2 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+    
+    .modal-header p {
+        font-size: 1rem;
+        margin-bottom: 24px;
     }
     
     .language-btn {
@@ -717,4 +734,34 @@ body {
     border-top-color: #667eea;
     animation: spin 1s ease-in-out infinite;
     margin-left: 10px;
+} 
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    .disclaimer-content {
+        max-width: 95vw;
+        max-height: 85vh;
+        padding: 16px;
+        margin: 20px;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+    }
+    
+    .german-text h3, .japanese-text h3 {
+        font-size: 1.2rem;
+    }
+    
+    .german-text p, .japanese-text p {
+        font-size: 1rem;
+    }
+    
+    .continue-btn {
+        padding: 14px 24px;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 300px;
+    }
 } 
